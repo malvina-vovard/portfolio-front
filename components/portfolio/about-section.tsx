@@ -36,14 +36,17 @@ export function AboutSection({ description }: AboutSectionProps) {
         gradientBackgroundStart="#000000"
         gradientBackgroundEnd="#050505"
         firstColor="247, 115, 20"
-        secondColor="255, 255, 255"
-        thirdColor="247, 115, 20"
+        secondColor="247, 115, 20"
+        thirdColor="137, 147, 158"
         fourthColor="80, 80, 80"
         fifthColor="247, 115, 20"
-        pointerColor="247, 115, 20"
+        pointerColor="137, 147, 158"
         size="50%"
-        containerClassName=" absolute inset-0 h-full w-full opacity-50"
+        containerClassName=" absolute inset-0 h-full w-full opacity-80 "
       />
+      <h1 className="z-30 absolute bottom-0 right-5 bebas-neue-regular max-w-6xl text-[clamp(4.4rem,14.6vw,13.5rem)] leading-[0.82] tracking-normal text-white/30">
+        A propos.
+      </h1>
       <div className="relative mx-auto grid max-w-7xl gap-12 lg:grid-cols-5">
         <Card className="min-h-[32rem] rounded-[2rem] border-white/12 bg-[rgb(0_0_0/0.5)] text-white shadow-2xl shadow-black/30 ring-1 ring-white/15 backdrop-blur-xl lg:col-span-2">
           <CardContent>
