@@ -3,14 +3,11 @@ import { ArrowLeftIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { ExperienceCard } from "@/components/portfolio/experience-card"
-import { SiteHeader } from "@/components/portfolio/site-header"
 import { experienceCategories, featuredExperiences } from "@/lib/portfolio/portfolio-data"
 
 export function AllProjectsPage() {
   return (
-    <>
-      <SiteHeader />
-      <main className="px-4 py-10 sm:px-6 lg:px-8">
+    <main className="px-4 py-10 sm:px-6 lg:px-8">
         <div className="mx-auto flex max-w-7xl flex-col gap-8">
           <Button asChild variant="ghost" className="w-fit">
             <Link href="/">
@@ -53,6 +50,5 @@ export function AllProjectsPage() {
           })}
         </div>
       </main>
-    </>
   )
 }

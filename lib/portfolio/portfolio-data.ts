@@ -50,7 +50,7 @@ export type WorkTimelineItem = {
 }
 
 export const portfolioNavigation = [
-  { label: "À propos", href: "/#a-propos" },
+  { label: "À propos", href: "/" },
   { label: "Marketing digital", href: "/experiences/marketing-digital" },
   { label: "Site web", href: "/experiences/site-web" },
   { label: "Design", href: "/experiences/design" },

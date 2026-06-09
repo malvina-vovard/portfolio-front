@@ -26,7 +26,10 @@ export function HeroSection() {
             <div
               className="rounded-3xl px-6 py-3 shadow-sm backdrop-blur"
             >
-              <h1 className="font-heading text-5xl md:text-7xl font-semibold leading-none tracking-normal text-balance  ">
+              <p className="plus-jakarta-sans-portfolio mb-2 text-sm font-semibold uppercase tracking-normal text-foreground/65 sm:text-base">
+                Malvina Vovard
+              </p>
+              <h1 className="bebas-neue-regular text-6xl font-bold leading-none tracking-normal text-balance sm:text-7xl md:text-[5rem]">
                 Marketing, web et design pour marques qui veulent respirer.
               </h1>
             </div>

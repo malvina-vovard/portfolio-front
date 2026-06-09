@@ -12,7 +12,6 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { SiteHeader } from "@/components/portfolio/site-header"
 import type { Experience, ExperienceCategory } from "@/lib/portfolio/portfolio-data"
 
 type ExperienceDetailPageProps = {
@@ -25,9 +24,7 @@ export function ExperienceDetailPage({
   experience,
 }: ExperienceDetailPageProps) {
   return (
-    <>
-      <SiteHeader />
-      <main className="px-4 py-10 sm:px-6 lg:px-8">
+    <main className="px-4 py-10 sm:px-6 lg:px-8">
         <article className="mx-auto flex max-w-7xl flex-col gap-6">
           <Button asChild variant="ghost" className="w-fit">
             <Link href={`/experiences/${category.slug}`}>
@@ -110,7 +107,6 @@ export function ExperienceDetailPage({
           </section>
         </article>
       </main>
-    </>
   )
 }
 

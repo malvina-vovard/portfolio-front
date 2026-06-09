@@ -14,8 +14,9 @@ import {
 } from "@/components/ui/card"
 import { skillBadges } from "@/lib/portfolio/portfolio-data"
 
-const PROFILE_IMAGE_URL =
-  "https://images.unsplash.com/photo-1524504388940-b1c1722653e1"
+const PROFILE_IMAGE_URL = "/images/malvina4.jpeg"
+  // "https://images.unsplash.com/photo-1524504388940-b1c1722653e1"
+
 
 const DEFAULT_ABOUT_DESCRIPTION =
   "J'accompagne les marques dans la construction d'une presence digitale claire: une strategie qui tient debout, des pages qui convertissent, et des visuels qui restent en tete."
@@ -28,7 +29,7 @@ export function AboutSection({ description }: AboutSectionProps) {
   return (
     <section
       id="a-propos"
-      className="relative w-full overflow-hidden bg-[#000000] px-4 py-14 mt-5 sm:px-6 lg:px-8"
+      className="relative w-full overflow-hidden bg-[#35373a] px-4 py-14 mt-5 sm:px-6 lg:px-8"
     >
       <BackgroundGradientAnimation
         interactive={false}
@@ -44,7 +45,7 @@ export function AboutSection({ description }: AboutSectionProps) {
         containerClassName=" absolute inset-0 h-full w-full opacity-50"
       />
       <div className="relative mx-auto grid max-w-7xl gap-12 lg:grid-cols-5">
-        <Card className="min-h-[32rem] rounded-[2rem] border-white/12 bg-white/2 text-white shadow-2xl shadow-black/30 ring-1 ring-white/15 backdrop-blur-xl lg:col-span-2">
+        <Card className="min-h-[32rem] rounded-[2rem] border-white/12 bg-[rgb(0_0_0/0.5)] text-white shadow-2xl shadow-black/30 ring-1 ring-white/15 backdrop-blur-xl lg:col-span-2">
           <CardContent>
             <div className="relative min-h-96 overflow-hidden rounded-[1.4rem]">
               <Image
@@ -82,7 +83,7 @@ export function AboutSection({ description }: AboutSectionProps) {
           </CardFooter>
         </Card>
 
-        <Card className="rounded-[2rem] border-white/12 bg-white/2 text-white shadow-2xl shadow-black/30 ring-1 ring-white/15 backdrop-blur-xl lg:col-span-3">
+        <Card className="rounded-[2rem] border-white/12 bg-[rgb(0_0_0/0.5)] text-white shadow-2xl shadow-black/30 ring-1 ring-white/15 backdrop-blur-xl lg:col-span-3">
           <CardContent className="flex flex-col gap-8 ">
             <p className="max-w-3xl text-white/95 leading-6">
               {description ?? DEFAULT_ABOUT_DESCRIPTION}
