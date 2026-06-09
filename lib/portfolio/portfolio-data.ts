@@ -268,11 +268,25 @@ export const workTimelineItems: WorkTimelineItem[] = [
       "Accompagnement de marques sur leur presence digitale, leurs contenus et leurs pages web.",
   },
   {
+    title: "Cheffe de projet digital",
+    company: "Studio Nova",
+    period: "2023 - 2024",
+    description:
+      "Pilotage de refontes de sites vitrines, coordination des contenus et suivi des livrables entre design, web et client.",
+  },
+  {
     title: "Chargee de communication",
     company: "Agence creative",
     period: "2022 - 2024",
     description:
       "Production de campagnes, coordination de contenus et suivi des performances.",
+  },
+  {
+    title: "Assistante social media",
+    company: "Maison Locale",
+    period: "2021 - 2022",
+    description:
+      "Preparation de calendriers editoriaux, creation de visuels simples et animation des reseaux sociaux au quotidien.",
   },
 ]
 
