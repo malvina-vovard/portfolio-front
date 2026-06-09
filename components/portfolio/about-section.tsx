@@ -54,7 +54,6 @@ export function AboutSection({ description }: AboutSectionProps) {
             ".about-portrait-image",
             ".about-description",
             ".about-divider",
-            ".about-skill",
           ],
           { clearProps: "all" },
         )
@@ -85,15 +84,6 @@ export function AboutSection({ description }: AboutSectionProps) {
           )
           .from(".about-description", { autoAlpha: 0, y: 24 }, 0.48)
           .from(".about-divider", { scaleX: 0, transformOrigin: "left center" }, 0.62)
-          .from(
-            ".about-skill",
-            {
-              autoAlpha: 0,
-              stagger: 0.035,
-              y: 20,
-            },
-            0.7,
-          )
 
         gsap.to(".about-gradient", {
           ease: "none",
@@ -134,19 +124,6 @@ export function AboutSection({ description }: AboutSectionProps) {
       rotation: isEntering ? -0.7 : 0,
       scale: isEntering ? 1.012 : 1,
       y: isEntering ? -6 : 0,
-    })
-  }
-
-  const animateSkill = (event: MouseEvent<HTMLSpanElement>, isEntering: boolean) => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      return
-    }
-
-    gsap.to(event.currentTarget, {
-      duration: 0.34,
-      ease: "back.out(1.7)",
-      scale: isEntering ? 1.08 : 1,
-      y: isEntering ? -4 : 0,
     })
   }
 
@@ -230,9 +207,7 @@ export function AboutSection({ description }: AboutSectionProps) {
                 <Badge
                   key={skill}
                   variant="default"
-                  className="about-skill text-sm bg-white/5 py-4! px-3! rounded-md font-light text-white/95 will-change-transform"
-                  onMouseEnter={(event) => animateSkill(event, true)}
-                  onMouseLeave={(event) => animateSkill(event, false)}
+                  className="text-sm bg-white/5 py-4! px-3! rounded-md font-light text-white/95"
                 >
                   {skill}
                 </Badge>
