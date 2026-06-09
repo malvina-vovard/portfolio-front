@@ -1,6 +1,11 @@
+"use client"
+
+import { useEffect, useRef, type MouseEvent } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { ExternalLinkIcon, MailIcon } from "lucide-react"
+import gsap from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
 
 import { Badge } from "@/components/ui/badge"
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation"
@@ -26,8 +31,128 @@ type AboutSectionProps = {
 }
 
 export function AboutSection({ description }: AboutSectionProps) {
+  const sectionRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger)
+
+    const section = sectionRef.current
+
+    if (!section) {
+      return
+    }
+
+    const context = gsap.context(() => {
+      const media = gsap.matchMedia()
+
+      media.add("(prefers-reduced-motion: reduce)", () => {
+        gsap.set(
+          [
+            ".about-gradient",
+            ".about-watermark",
+            ".about-card",
+            ".about-portrait-image",
+            ".about-description",
+            ".about-divider",
+            ".about-skill",
+          ],
+          { clearProps: "all" },
+        )
+      })
+
+      media.add("(prefers-reduced-motion: no-preference)", () => {
+        const timeline = gsap.timeline({
+          defaults: { duration: 0.9, ease: "power3.out" },
+          scrollTrigger: {
+            end: "top 18%",
+            start: "top 72%",
+            toggleActions: "play none none reverse",
+            trigger: section,
+          },
+        })
+
+        timeline
+          .from(".about-watermark", { autoAlpha: 0, x: 80 }, 0)
+          .from(
+            ".about-card",
+            {
+              autoAlpha: 0,
+              rotation: (index) => (index === 0 ? -2.5 : 2.5),
+              stagger: 0.16,
+              y: 72,
+            },
+            0.08,
+          )
+          .from(".about-description", { autoAlpha: 0, y: 24 }, 0.48)
+          .from(".about-divider", { scaleX: 0, transformOrigin: "left center" }, 0.62)
+          .from(
+            ".about-skill",
+            {
+              autoAlpha: 0,
+              stagger: 0.035,
+              y: 20,
+            },
+            0.7,
+          )
+
+        gsap.to(".about-gradient", {
+          ease: "none",
+          scale: 1.12,
+          yPercent: -4,
+          scrollTrigger: {
+            end: "bottom top",
+            scrub: true,
+            start: "top bottom",
+            trigger: section,
+          },
+        })
+
+        gsap.to(".about-portrait-image", {
+          ease: "none",
+          yPercent: -9,
+          scrollTrigger: {
+            end: "bottom top",
+            scrub: true,
+            start: "top bottom",
+            trigger: section,
+          },
+        })
+      })
+    }, section)
+
+    return () => context.revert()
+  }, [])
+
+  const animateSurface = (event: MouseEvent<HTMLElement>, isEntering: boolean) => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return
+    }
+
+    gsap.to(event.currentTarget, {
+      duration: 0.45,
+      ease: "power3.out",
+      rotation: isEntering ? -0.7 : 0,
+      scale: isEntering ? 1.012 : 1,
+      y: isEntering ? -6 : 0,
+    })
+  }
+
+  const animateSkill = (event: MouseEvent<HTMLSpanElement>, isEntering: boolean) => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return
+    }
+
+    gsap.to(event.currentTarget, {
+      duration: 0.34,
+      ease: "back.out(1.7)",
+      scale: isEntering ? 1.08 : 1,
+      y: isEntering ? -4 : 0,
+    })
+  }
+
   return (
     <section
+      ref={sectionRef}
       id="a-propos"
       className="relative w-full overflow-hidden bg-[#35373a] px-4 py-14 mt-5 sm:px-6 lg:px-8"
     >
@@ -42,13 +167,17 @@ export function AboutSection({ description }: AboutSectionProps) {
         fifthColor="247, 115, 20"
         pointerColor="137, 147, 158"
         size="50%"
-        containerClassName=" absolute inset-0 h-full w-full opacity-80 "
+        containerClassName="about-gradient absolute inset-0 h-full w-full opacity-80 will-change-transform"
       />
-      <h1 className="z-30 absolute bottom-0 right-5 bebas-neue-regular max-w-6xl text-[clamp(4.4rem,14.6vw,13.5rem)] leading-[0.82] tracking-normal text-white/30">
+      <h1 className="about-watermark z-30 absolute bottom-0 right-5 bebas-neue-regular max-w-6xl text-[clamp(4.4rem,14.6vw,13.5rem)] leading-[0.82] tracking-normal text-white/30 will-change-transform">
         A propos.
       </h1>
       <div className="relative mx-auto grid max-w-7xl gap-12 lg:grid-cols-5">
-        <Card className="min-h-[32rem] rounded-[2rem] border-white/12 bg-[rgb(0_0_0/0.5)] text-white shadow-2xl shadow-black/30 ring-1 ring-white/15 backdrop-blur-xl lg:col-span-2">
+        <Card
+          className="about-card min-h-[32rem] rounded-[2rem] border-white/12 bg-[rgb(0_0_0/0.5)] text-white shadow-2xl shadow-black/30 ring-1 ring-white/15 backdrop-blur-xl will-change-transform lg:col-span-2"
+          onMouseEnter={(event) => animateSurface(event, true)}
+          onMouseLeave={(event) => animateSurface(event, false)}
+        >
           <CardContent>
             <div className="relative min-h-96 overflow-hidden rounded-[1.4rem]">
               <Image
@@ -56,7 +185,7 @@ export function AboutSection({ description }: AboutSectionProps) {
                 alt="Portrait editorial de Malvina"
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
-                className="object-cover"
+                className="about-portrait-image scale-110 object-cover will-change-transform"
               />
             </div>
           </CardContent>
@@ -86,18 +215,24 @@ export function AboutSection({ description }: AboutSectionProps) {
           </CardFooter>
         </Card>
 
-        <Card className="rounded-[2rem] border-white/12 bg-[rgb(0_0_0/0.5)] text-white shadow-2xl shadow-black/30 ring-1 ring-white/15 backdrop-blur-xl lg:col-span-3">
+        <Card
+          className="about-card rounded-[2rem] border-white/12 bg-[rgb(0_0_0/0.5)] text-white shadow-2xl shadow-black/30 ring-1 ring-white/15 backdrop-blur-xl will-change-transform lg:col-span-3"
+          onMouseEnter={(event) => animateSurface(event, true)}
+          onMouseLeave={(event) => animateSurface(event, false)}
+        >
           <CardContent className="flex flex-col gap-8 ">
-            <p className="max-w-3xl text-white/95 leading-6">
+            <p className="about-description max-w-3xl text-white/95 leading-6">
               {description ?? DEFAULT_ABOUT_DESCRIPTION}
             </p>
-            <div className="h-[1px] w-full bg-white/10"></div>
+            <div className="about-divider h-[1px] w-full bg-white/10"></div>
             <div className="flex flex-wrap gap-2">
               {skillBadges.map((skill) => (
                 <Badge
                   key={skill}
                   variant="default"
-                  className=" text-sm bg-white/5 py-4! px-3! rounded-md font-light text-white/95"
+                  className="about-skill text-sm bg-white/5 py-4! px-3! rounded-md font-light text-white/95 will-change-transform"
+                  onMouseEnter={(event) => animateSkill(event, true)}
+                  onMouseLeave={(event) => animateSkill(event, false)}
                 >
                   {skill}
                 </Badge>
