@@ -1,0 +1,341 @@
+"use client"
+
+import { useEffect, useRef } from "react"
+import Image from "next/image"
+import Link from "next/link"
+import { ArrowUpRightIcon } from "lucide-react"
+import gsap from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { experienceCategories, featuredExperiences, type Experience } from "@/lib/portfolio/portfolio-data"
+
+const stackProjects = featuredExperiences.slice(0, 5)
+
+const cardOffsets = [
+  { rotate: -4, x: -18, y: 10 },
+  { rotate: 3, x: 16, y: -6 },
+  { rotate: -1.5, x: 8, y: 18 },
+  { rotate: 4.5, x: -10, y: -14 },
+  { rotate: -3, x: 20, y: 12 },
+]
+
+const infoLayouts = [
+  {
+    positions: [
+      { x: 230, y: -170 },
+      { x: -270, y: -150 },
+      { x: -245, y: 185 },
+    ],
+    rotations: ["rotate-[3deg]", "rotate-[-2deg]", "rotate-[-4deg]"],
+  },
+  {
+    positions: [
+      { x: -270, y: -170 },
+      { x: 250, y: -150 },
+      { x: 245, y: 185 },
+    ],
+    rotations: ["rotate-[-3deg]", "rotate-[2deg]", "rotate-[4deg]"],
+  },
+  {
+    positions: [
+      { x: 250, y: 170 },
+      { x: -270, y: 145 },
+      { x: -245, y: -185 },
+    ],
+    rotations: ["rotate-[4deg]", "rotate-[-3deg]", "rotate-[2deg]"],
+  },
+  {
+    positions: [
+      { x: -270, y: 170 },
+      { x: 250, y: 145 },
+      { x: 245, y: -185 },
+    ],
+    rotations: ["rotate-[-4deg]", "rotate-[3deg]", "rotate-[-2deg]"],
+  },
+  {
+    positions: [
+      { x: 0, y: -235 },
+      { x: -300, y: 30 },
+      { x: 295, y: 50 },
+    ],
+    rotations: ["rotate-[2deg]", "rotate-[-4deg]", "rotate-[3deg]"],
+  },
+]
+
+type ProjectStackProps = {
+  projects: Experience[]
+}
+
+type ProjectInfoProps = {
+  project: Experience
+  index: number
+}
+
+type ProjectCardProps = {
+  project: Experience
+  index: number
+  total: number
+}
+
+type ToolBadgeProps = {
+  tool: string
+}
+
+export function ProjectsSectionStack() {
+  const sectionRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger)
+
+    const section = sectionRef.current
+
+    if (!section) {
+      return
+    }
+
+    const context = gsap.context(() => {
+      const media = gsap.matchMedia()
+
+      media.add("(prefers-reduced-motion: reduce), (max-width: 1023px)", () => {
+        gsap.set(".project-stack-card, .project-stack-info", { clearProps: "all" })
+      })
+
+      media.add("(prefers-reduced-motion: no-preference) and (min-width: 1024px)", () => {
+        const cards = gsap.utils.toArray<HTMLElement>(".project-stack-card")
+        const infoGroups = gsap.utils.toArray<HTMLElement>(".project-stack-info")
+
+        gsap.set(cards, { autoAlpha: 1, transformOrigin: "50% 55%" })
+        gsap.set(infoGroups, { autoAlpha: 1 })
+        gsap.set(".project-stack-info [data-info-part]", {
+          autoAlpha: 0,
+          scale: 0.82,
+          x: 0,
+          y: 0,
+        })
+        gsap.set(".project-stack-frame", { autoAlpha: 0, scale: 0.92, y: 28 })
+
+        const timeline = gsap.timeline({
+          defaults: { ease: "power3.out" },
+          scrollTrigger: {
+            anticipatePin: 1,
+            end: () => `+=${window.innerHeight * (stackProjects.length * 1.8)}`,
+            pin: true,
+            scrub: 1.35,
+            start: "top top",
+            trigger: section,
+          },
+        })
+
+        timeline.to(".project-stack-frame", {
+          autoAlpha: 1,
+          duration: 0.7,
+          scale: 1,
+          y: 0,
+        })
+
+        stackProjects.forEach((project, index) => {
+          const infoGroup = infoGroups[index]
+          const card = cards[index]
+          const layout = infoLayouts[index % infoLayouts.length]
+
+          timeline
+            .to(
+              infoGroup?.querySelectorAll("[data-info-part]") ?? [],
+              {
+                autoAlpha: 1,
+                duration: 1.05,
+                scale: 1,
+                stagger: 0.12,
+                x: (partIndex) => layout.positions[partIndex]?.x ?? 0,
+                y: (partIndex) => layout.positions[partIndex]?.y ?? 0,
+              },
+              index === 0 ? "+=0.18" : "+=0.08",
+            )
+            .to({}, { duration: 1.1 })
+
+          if (index < stackProjects.length - 1) {
+            timeline
+              .to(infoGroup?.querySelectorAll("[data-info-part]") ?? [], {
+                autoAlpha: 0,
+                duration: 0.68,
+                scale: 0.88,
+                stagger: 0.07,
+                x: 0,
+                y: 0,
+              })
+              .to(
+                card,
+                {
+                  autoAlpha: 0,
+                  duration: 0.72,
+                  rotate: index % 2 === 0 ? -14 : 13,
+                  scale: 0.86,
+                  yPercent: -95,
+                },
+                "<0.08",
+              )
+          } else {
+            timeline.to(infoGroup?.querySelectorAll("[data-info-part]") ?? [], {
+              duration: 0.62,
+              scale: 1,
+            })
+          }
+        })
+      })
+    }, section)
+
+    return () => context.revert()
+  }, [])
+
+  return (
+    <section ref={sectionRef} className="overflow-hidden bg-background px-4 py-16 sm:px-6 lg:px-8 lg:py-0">
+      <div className="mx-auto max-w-7xl lg:grid lg:min-h-screen lg:grid-rows-[auto_1fr] lg:py-8">
+        <div className="mb-10 flex flex-col gap-5 lg:mb-0">
+          <h2 className="bebas-neue-regular text-[clamp(5rem,15vw,13rem)] leading-[0.82] tracking-normal">
+            Projets.
+          </h2>
+          <div className="flex justify-start md:justify-end">
+            <Button asChild variant="outline" className="w-fit">
+              <Link href="/projets">
+                Tous les projets
+                <ArrowUpRightIcon data-icon="inline-end" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+
+        <div className="hidden min-h-0 place-items-center lg:grid">
+          <div className="project-stack-frame relative grid h-[34rem] w-full max-w-5xl place-items-center">
+            <ProjectStack projects={stackProjects} />
+            {stackProjects.map((project, index) => (
+              <ProjectInfo key={project.slug} project={project} index={index} />
+            ))}
+          </div>
+        </div>
+
+        <div className="grid gap-5 lg:hidden">
+          {stackProjects.map((project, index) => (
+            <MobileProjectCard key={project.slug} project={project} index={index} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function ProjectStack({ projects }: ProjectStackProps) {
+  return (
+    <div className="relative aspect-[4/5] w-[min(34vw,25rem)]">
+      {projects.map((project, index) => (
+        <ProjectCard key={project.slug} project={project} index={index} total={projects.length} />
+      ))}
+    </div>
+  )
+}
+
+function ProjectCard({ project, index, total }: ProjectCardProps) {
+  const offset = cardOffsets[index % cardOffsets.length]
+
+  return (
+    <div
+      className="project-stack-card absolute inset-0 overflow-hidden rounded-[1.35rem] bg-muted shadow-[0_28px_80px_rgb(0_0_0/0.18)] ring-1 ring-foreground/10 will-change-transform"
+      style={{
+        transform: `translate(${offset.x}px, ${offset.y}px) rotate(${offset.rotate}deg)`,
+        zIndex: total - index,
+      }}
+    >
+      <Image
+        src={project.imageUrl}
+        alt={`Visuel du projet ${project.client}`}
+        fill
+        sizes="32rem"
+        className="object-cover"
+      />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_56%,rgb(0_0_0/0.34))]" />
+      <div className="absolute bottom-4 left-4 rounded-full bg-background/92 px-3 py-1 text-xs font-semibold shadow-sm backdrop-blur">
+        {String(index + 1).padStart(2, "0")}
+      </div>
+    </div>
+  )
+}
+
+function ProjectInfo({ project, index }: ProjectInfoProps) {
+  const category = experienceCategories.find(
+    (experienceCategory) => experienceCategory.slug === project.categorySlug,
+  )
+  const layout = infoLayouts[index % infoLayouts.length]
+
+  return (
+    <div className="project-stack-info pointer-events-none absolute left-1/2 top-1/2 z-20">
+      <div
+        data-info-part
+        className={`absolute left-0 top-0 w-72 origin-center -translate-x-1/2 -translate-y-1/2 ${layout.rotations[0]} rounded-[1rem] bg-[var(--portfolio-hero-accent)] px-5 py-4 text-white shadow-[0_20px_50px_rgb(247_115_20/0.24)] will-change-transform`}
+      >
+        <p className="mb-2 text-xs uppercase tracking-normal text-white/70">
+          {category?.label} / {project.client}
+        </p>
+        <h3 className="text-3xl font-semibold leading-[1.02] tracking-normal text-balance">
+          {project.title}
+        </h3>
+        <p className="mt-4 text-sm font-semibold text-white/80">{project.period}</p>
+      </div>
+
+      <div
+        data-info-part
+        className={`absolute left-0 top-0 w-80 origin-center -translate-x-1/2 -translate-y-1/2 ${layout.rotations[1]} rounded-[1rem] border border-foreground/12 bg-background px-5 py-4 shadow-[0_18px_45px_rgb(0_0_0/0.1)] will-change-transform`}
+      >
+        <p className="text-base leading-7">{project.summary}</p>
+      </div>
+
+      <div
+        data-info-part
+        className={`absolute left-0 top-0 flex w-80 origin-center -translate-x-1/2 -translate-y-1/2 ${layout.rotations[2]} flex-wrap gap-2 rounded-[1rem] border border-white/12 bg-[rgb(0_0_0/0.88)] p-4 text-white shadow-[0_18px_45px_rgb(0_0_0/0.22)] ring-1 ring-white/10 backdrop-blur will-change-transform`}
+      >
+        {[...project.tools, ...project.apps].slice(0, 6).map((tool) => (
+          <ToolBadge key={`${project.slug}-${tool}`} tool={tool} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function ToolBadge({ tool }: ToolBadgeProps) {
+  return (
+    <Badge
+      variant="default"
+      className="rounded-md bg-white/5 px-3! py-4! text-sm leading-7 text-white/95"
+    >
+      {tool}
+    </Badge>
+  )
+}
+
+function MobileProjectCard({ project, index }: ProjectInfoProps) {
+  return (
+    <article className="border-t border-foreground/15 py-8 last:border-b">
+      <div className="relative aspect-[4/3] overflow-hidden rounded-[1.25rem] bg-muted">
+        <Image
+          src={project.imageUrl}
+          alt={`Visuel du projet ${project.client}`}
+          fill
+          sizes="(max-width: 1023px) calc(100vw - 2rem), 1px"
+          className="object-cover"
+        />
+      </div>
+      <div className="mt-5 flex flex-col gap-4">
+        <p className="text-sm text-muted-foreground">
+          {String(index + 1).padStart(2, "0")} / {project.client}
+        </p>
+        <h3 className="font-heading text-4xl font-semibold tracking-normal">{project.title}</h3>
+        <p className="text-base leading-7 text-muted-foreground">{project.summary}</p>
+        <div className="flex flex-wrap gap-2 rounded-[1rem] bg-[rgb(0_0_0/0.88)] p-4">
+          {[...project.tools, ...project.apps].slice(0, 6).map((tool) => (
+            <ToolBadge key={`${project.slug}-mobile-${tool}`} tool={tool} />
+          ))}
+        </div>
+      </div>
+    </article>
+  )
+}

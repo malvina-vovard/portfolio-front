@@ -45,7 +45,7 @@ Current home section order:
 - about
 - formations
 - professional experiences
-- featured projects
+- scroll stack projects
 - contact
 
 About section background:

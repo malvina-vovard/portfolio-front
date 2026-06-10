@@ -1,8 +1,8 @@
 import { AboutSection } from "@/components/portfolio/about-section"
 import { ContactSection } from "@/components/portfolio/contact-section"
-import { FeaturedExperiencesSection } from "@/components/portfolio/featured-experiences-section"
 import { HeroSection } from "@/components/portfolio/hero-section"
 import { ProfessionalExperienceSection } from "@/components/portfolio/professional-experience-section"
+import { ProjectsSectionStack } from "@/components/portfolio/projects-section-stack"
 
 type PortfolioHomeProps = {
   aboutDescription?: string | null
@@ -14,7 +14,7 @@ export function PortfolioHome({ aboutDescription }: PortfolioHomeProps) {
       <HeroSection />
       <AboutSection description={aboutDescription} />
       <ProfessionalExperienceSection />
-      <FeaturedExperiencesSection />
+      <ProjectsSectionStack />
       <ContactSection />
     </main>
   )

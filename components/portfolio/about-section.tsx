@@ -198,7 +198,7 @@ export function AboutSection({ description }: AboutSectionProps) {
           onMouseLeave={(event) => animateSurface(event, false)}
         >
           <CardContent className="flex flex-col gap-8 ">
-            <p className="about-description max-w-3xl text-white/95 leading-6">
+            <p className="about-description font-medium max-w-3xl text-white/95 leading-6">
               {description ?? DEFAULT_ABOUT_DESCRIPTION}
             </p>
             <div className="about-divider h-[1px] w-full bg-white/10"></div>
@@ -207,7 +207,7 @@ export function AboutSection({ description }: AboutSectionProps) {
                 <Badge
                   key={skill}
                   variant="default"
-                  className="text-sm bg-white/5 py-4! px-3! rounded-md font-light text-white/95"
+                  className="text-sm bg-white/5 py-4! px-3! rounded-md text-white/95"
                 >
                   {skill}
                 </Badge>
