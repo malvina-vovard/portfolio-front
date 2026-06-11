@@ -1,105 +1,73 @@
-import { ExternalLinkIcon, MailIcon, SendIcon, UserIcon } from "lucide-react"
-import type { LucideIcon } from "lucide-react"
+import { ExternalLinkIcon, MailIcon } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import {
-  Field,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
+const contactLinks = [
+  {
+    href: "mailto:contact@malvina.fr",
+    icon: MailIcon,
+    label: "Email",
+    value: "contact@malvina.fr",
+  },
+  {
+    href: "https://www.linkedin.com/in/malvina",
+    icon: ExternalLinkIcon,
+    label: "LinkedIn",
+    value: "/in/malvina",
+  },
+]
 
 export function ContactSection() {
   return (
-    <section id="contact" className="px-4 py-12 sm:px-6 lg:px-8">
-      <Card className="mx-auto max-w-7xl rounded-[2rem]">
-        <CardHeader>
-          <CardDescription>Contact</CardDescription>
-          <CardTitle className="max-w-3xl text-4xl leading-tight">
-            Une idee, une marque a clarifier, une page a lancer?
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form className="grid gap-6 lg:grid-cols-[1fr_0.8fr]">
-            <FieldGroup>
-              <Field>
-                <FieldLabel htmlFor="name">Nom</FieldLabel>
-                <Input id="name" name="name" placeholder="Votre nom" />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="firstname">Prenom</FieldLabel>
-                <Input id="firstname" name="firstname" placeholder="Votre prenom" />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="linkedin">LinkedIn</FieldLabel>
-                <Input
-                  id="linkedin"
-                  name="linkedin"
-                  placeholder="https://www.linkedin.com/in/..."
-                />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="email">Email</FieldLabel>
-                <Input id="email" name="email" type="email" placeholder="vous@email.com" />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="message">Message</FieldLabel>
-                <Textarea
-                  id="message"
-                  name="message"
-                  placeholder="Parlez-moi du projet"
-                  className="min-h-40"
-                />
-              </Field>
-            </FieldGroup>
-            <div className="flex flex-col justify-between rounded-[2rem] bg-muted p-6">
-              <div className="flex flex-col gap-5">
-                <p className="max-w-sm text-sm leading-6 text-muted-foreground">
-                  Partagez le contexte, l&apos;objectif et les supports deja existants.
-                  Je reviens avec une premiere lecture claire du besoin.
-                </p>
-                <div className="grid gap-3">
-                  <ContactLine icon={UserIcon} label="Nom / prenom" value="Malvina" />
-                  <ContactLine icon={MailIcon} label="Email" value="contact@malvina.fr" />
-                  <ContactLine icon={ExternalLinkIcon} label="LinkedIn" value="/in/malvina" />
-                </div>
-              </div>
-              <Button type="submit" size="lg" className="mt-12 w-fit">
-                Envoyer
-                <SendIcon data-icon="inline-end" />
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
-    </section>
-  )
-}
+    <section
+      id="contact"
+      className="relative -mt-24 overflow-hidden bg-black px-4 pb-12 pt-40 text-white sm:px-6 sm:pb-16 lg:px-8 lg:pb-20 lg:pt-48"
+    >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute left-0 top-28 h-48 w-40 opacity-80 [background-image:radial-gradient(circle,_var(--portfolio-hero-accent)_1px,_transparent_1.6px)] [background-size:9px_9px] [mask-image:linear-gradient(90deg,_black,_transparent)]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute right-0 top-40 h-32 w-44 opacity-80 [background-image:radial-gradient(circle,_var(--portfolio-hero-accent)_1px,_transparent_1.6px)] [background-size:9px_9px] [mask-image:linear-gradient(270deg,_black,_transparent)]"
+      />
 
-function ContactLine({
-  icon: Icon,
-  label,
-  value,
-}: {
-  icon: LucideIcon
-  label: string
-  value: string
-}) {
-  return (
-    <div className="flex items-center gap-3 rounded-3xl bg-background/80 p-3">
-      <Icon aria-hidden="true" />
-      <div>
-        <p className="text-xs text-muted-foreground">{label}</p>
-        <p className="text-sm font-medium">{value}</p>
+      <div className="mx-auto flex max-w-7xl flex-col justify-between">
+        <div className="max-w-6xl">
+          <p className="mb-6 text-sm uppercase tracking-[0.28em] text-white md:text-white/45">Contact</p>
+          <h2 className="bebas-neue-regular relative text-[clamp(5.5rem,18vw,18rem)] leading-[0.78] tracking-normal text-white/80 md:text-white/10">
+            {/* <span
+              aria-hidden="true"
+              className="absolute left-[0.035em] top-[0.035em] text-transparent [-webkit-text-stroke:1px_var(--portfolio-hero-accent)]"
+            >
+              Malvina Vovard
+            </span> */}
+            <span className="relative">Malvina Vovard</span>
+          </h2>
+        </div>
+
+        <div className="mt-16 grid gap-3 sm:max-w-xl sm:grid-cols-2">
+          {contactLinks.map((link) => {
+            const Icon = link.icon
+
+            return (
+              <a
+                key={link.href}
+                href={link.href}
+                className="group flex min-h-24 items-center justify-between gap-5 border-t border-white/18 py-5 transition-colors hover:border-[var(--portfolio-hero-accent)]"
+              >
+                <span>
+                  <span className="block text-xs uppercase tracking-[0.22em] text-white/45">
+                    {link.label}
+                  </span>
+                  <span className="mt-2 block text-lg font-medium text-white">{link.value}</span>
+                </span>
+                <span className="grid size-11 shrink-0 place-items-center rounded-full border border-white/18 text-white transition-colors group-hover:border-[var(--portfolio-hero-accent)] group-hover:text-[var(--portfolio-hero-accent)]">
+                  <Icon aria-hidden="true" className="size-5" />
+                </span>
+              </a>
+            )
+          })}
+        </div>
       </div>
-    </div>
+    </section>
   )
 }

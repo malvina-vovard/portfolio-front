@@ -14,8 +14,8 @@ export function ProfessionalExperienceSection() {
   }))
 
   return (
-    <section className="py-12">
-      <div className="mx-auto max-w-7xl pt-12 sm:px-6 lg:px-8 lg:pt-16">
+    <section className="px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl pt-12 lg:pt-16">
         <h2 className="bebas-neue-regular max-w-6xl text-[clamp(4.4rem,14.6vw,13.5rem)] leading-[0.82] tracking-normal text-(--portfolio-hero-accent)">
           Expériences.
         </h2>

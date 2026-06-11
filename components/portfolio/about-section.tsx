@@ -121,8 +121,8 @@ export function AboutSection({ description }: AboutSectionProps) {
     gsap.to(event.currentTarget, {
       duration: 0.45,
       ease: "power3.out",
-      rotation: isEntering ? -0.7 : 0,
-      scale: isEntering ? 1.012 : 1,
+      filter: isEntering ? "drop-shadow(0 22px 28px rgb(0 0 0 / 0.24))" : "none",
+      force3D: false,
       y: isEntering ? -6 : 0,
     })
   }
@@ -151,7 +151,7 @@ export function AboutSection({ description }: AboutSectionProps) {
       </h1>
       <div className="relative mx-auto grid max-w-7xl gap-12 lg:grid-cols-5">
         <Card
-          className="about-card min-h-[32rem] rounded-[2rem] border-white/12 bg-[rgb(0_0_0/0.5)] text-white shadow-2xl shadow-black/30 ring-1 ring-white/15 backdrop-blur-xl will-change-transform lg:col-span-2"
+          className="about-card min-h-[32rem] rounded-[2rem] border border-white/12 bg-[rgb(0_0_0/0.5)] text-white shadow-2xl shadow-black/30 ring-1 ring-white/15 backdrop-blur-xl will-change-transform lg:col-span-2"
           onMouseEnter={(event) => animateSurface(event, true)}
           onMouseLeave={(event) => animateSurface(event, false)}
         >
@@ -193,7 +193,7 @@ export function AboutSection({ description }: AboutSectionProps) {
         </Card>
 
         <Card
-          className="about-card rounded-[2rem] border-white/12 bg-[rgb(0_0_0/0.5)] text-white shadow-2xl shadow-black/30 ring-1 ring-white/15 backdrop-blur-xl will-change-transform lg:col-span-3"
+          className="about-card rounded-[2rem] border border-white/12 bg-[rgb(0_0_0/0.5)] text-white shadow-2xl shadow-black/30 ring-1 ring-white/15 backdrop-blur-xl will-change-transform lg:col-span-3"
           onMouseEnter={(event) => animateSurface(event, true)}
           onMouseLeave={(event) => animateSurface(event, false)}
         >

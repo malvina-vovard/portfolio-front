@@ -114,7 +114,20 @@ export function ProjectsSectionStack() {
           x: 0,
           y: 0,
         })
-        gsap.set(".project-stack-frame", { autoAlpha: 0, scale: 0.92, y: 28 })
+        gsap.set(".project-stack-frame", { autoAlpha: 0, scale: 0.88, y: 96 })
+
+        gsap.to(".project-stack-frame", {
+          autoAlpha: 1,
+          ease: "power2.out",
+          scale: 1,
+          scrollTrigger: {
+            end: "top top",
+            scrub: 0.9,
+            start: "top 88%",
+            trigger: section,
+          },
+          y: 0,
+        })
 
         const timeline = gsap.timeline({
           defaults: { ease: "power3.out" },
@@ -128,12 +141,7 @@ export function ProjectsSectionStack() {
           },
         })
 
-        timeline.to(".project-stack-frame", {
-          autoAlpha: 1,
-          duration: 0.7,
-          scale: 1,
-          y: 0,
-        })
+        timeline.to({}, { duration: 0.55 })
 
         stackProjects.forEach((project, index) => {
           const infoGroup = infoGroups[index]
@@ -151,7 +159,7 @@ export function ProjectsSectionStack() {
                 x: (partIndex) => layout.positions[partIndex]?.x ?? 0,
                 y: (partIndex) => layout.positions[partIndex]?.y ?? 0,
               },
-              index === 0 ? "+=0.18" : "+=0.08",
+              index === 0 ? "+=0.22" : "+=0.08",
             )
             .to({}, { duration: 1.1 })
 
@@ -190,7 +198,10 @@ export function ProjectsSectionStack() {
   }, [])
 
   return (
-    <section ref={sectionRef} className="overflow-hidden bg-background px-4 py-16 sm:px-6 lg:px-8 lg:py-0">
+    <section
+      ref={sectionRef}
+      className="relative z-10 overflow-hidden rounded-b-[clamp(3rem,7vw,6.5rem)] bg-background px-4 py-16 sm:px-6 lg:px-8 lg:py-0"
+    >
       <div className="mx-auto max-w-7xl lg:grid lg:min-h-screen lg:grid-rows-[auto_1fr] lg:py-8">
         <div className="mb-10 flex flex-col gap-5 lg:mb-0">
           <h2 className="bebas-neue-regular text-[clamp(5rem,15vw,13rem)] leading-[0.82] tracking-normal">
