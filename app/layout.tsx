@@ -13,6 +13,7 @@ import {
   siteName,
 } from "@/lib/seo";
 import { cn } from "@/lib/utils";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -128,6 +129,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    <>
     <html
       lang="fr"
       className={cn(
@@ -151,8 +153,11 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: getJsonLd(personJsonLd) }}
         />
         <SiteHeader />
+        
         {children}
       </body>
     </html>
+    <SpeedInsights />
+    </>
   );
 }
