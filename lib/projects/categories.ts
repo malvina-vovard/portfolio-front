@@ -24,6 +24,16 @@ export function getDisplayCategorySlugFromRoute(categorySlug: string) {
   return displaySlugByRoute[categorySlug] ?? categorySlug
 }
 
+export function getProjectCategoryRouteSlug(category: ProjectCategory) {
+  const routeSlugByCategory: Record<ProjectCategory, string> = {
+    design: "design",
+    marketing_digital: "marketing-digital",
+    website: "site-web",
+  }
+
+  return routeSlugByCategory[category]
+}
+
 export function getProjectRouteTitle(title: string) {
   return encodeURIComponent(title)
 }

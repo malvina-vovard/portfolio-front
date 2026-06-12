@@ -10,6 +10,7 @@ export type Project = {
   date?: string | null
   outils?: string | null
   sous_titre?: string | null
+  favoris?: boolean | null
 }
 
 export type ProjectMediaFormat = {

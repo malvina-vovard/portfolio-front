@@ -8,6 +8,38 @@ import type {
   ProjectWithMedia,
 } from "@/types/project"
 
+export async function getFavoriteProjects() {
+  try {
+    const response = await strapiFetch<StrapiCollectionResponse<ProjectWithCover>>(
+      "/projets",
+      {
+        query: {
+          filters: {
+            favoris: {
+              $eq: true,
+            },
+          },
+          populate: {
+            couverture: true,
+          },
+        },
+        next: {
+          revalidate: 60,
+          tags: ["projects", "projects:favorites"],
+        },
+      },
+    )
+
+    return response.data
+  } catch (error) {
+    if (isStrapiRequestError(error)) {
+      return []
+    }
+
+    throw error
+  }
+}
+
 export async function getProjectsByCategory(category: ProjectCategory) {
   try {
     const response = await strapiFetch<StrapiCollectionResponse<ProjectWithCover>>(

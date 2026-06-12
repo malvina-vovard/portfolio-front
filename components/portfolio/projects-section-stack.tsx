@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useMemo, useRef } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowUpRightIcon } from "lucide-react"
@@ -9,9 +9,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { experienceCategories, featuredExperiences, type Experience } from "@/lib/portfolio/portfolio-data"
-
-const stackProjects = featuredExperiences.slice(0, 5)
 
 const cardOffsets = [
   { rotate: -4, x: -18, y: 10 },
@@ -64,17 +61,30 @@ const infoLayouts = [
   },
 ]
 
+export type HomeProject = {
+  category: string
+  company: string
+  href: string
+  id: string
+  imageAlt: string
+  imageUrl: string | null
+  period: string | null
+  summary: string
+  title: string
+  tools: string[]
+}
+
 type ProjectStackProps = {
-  projects: Experience[]
+  projects: HomeProject[]
 }
 
 type ProjectInfoProps = {
-  project: Experience
+  project: HomeProject
   index: number
 }
 
 type ProjectCardProps = {
-  project: Experience
+  project: HomeProject
   index: number
   total: number
 }
@@ -83,10 +93,19 @@ type ToolBadgeProps = {
   tool: string
 }
 
-export function ProjectsSectionStack() {
+type ProjectsSectionStackProps = {
+  projects: HomeProject[]
+}
+
+export function ProjectsSectionStack({ projects }: ProjectsSectionStackProps) {
   const sectionRef = useRef<HTMLElement>(null)
+  const stackProjects = useMemo(() => projects.slice(0, 5), [projects])
 
   useEffect(() => {
+    if (stackProjects.length === 0) {
+      return
+    }
+
     gsap.registerPlugin(ScrollTrigger)
 
     const section = sectionRef.current
@@ -195,7 +214,7 @@ export function ProjectsSectionStack() {
     }, section)
 
     return () => context.revert()
-  }, [])
+  }, [stackProjects])
 
   return (
     <section
@@ -218,18 +237,26 @@ export function ProjectsSectionStack() {
         </div>
 
         <div className="hidden min-h-0 place-items-center lg:grid">
-          <div className="project-stack-frame relative grid h-[34rem] w-full max-w-5xl place-items-center">
-            <ProjectStack projects={stackProjects} />
-            {stackProjects.map((project, index) => (
-              <ProjectInfo key={project.slug} project={project} index={index} />
-            ))}
-          </div>
+          {stackProjects.length > 0 ? (
+            <div className="project-stack-frame relative grid h-[34rem] w-full max-w-5xl place-items-center">
+              <ProjectStack projects={stackProjects} />
+              {stackProjects.map((project, index) => (
+                <ProjectInfo key={project.id} project={project} index={index} />
+              ))}
+            </div>
+          ) : (
+            <EmptyFavoriteProjectsState />
+          )}
         </div>
 
         <div className="grid gap-5 lg:hidden">
-          {stackProjects.map((project, index) => (
-            <MobileProjectCard key={project.slug} project={project} index={index} />
-          ))}
+          {stackProjects.length > 0 ? (
+            stackProjects.map((project, index) => (
+              <MobileProjectCard key={project.id} project={project} index={index} />
+            ))
+          ) : (
+            <EmptyFavoriteProjectsState />
+          )}
         </div>
       </div>
     </section>
@@ -240,7 +267,7 @@ function ProjectStack({ projects }: ProjectStackProps) {
   return (
     <div className="relative aspect-[4/5] w-[min(34vw,25rem)]">
       {projects.map((project, index) => (
-        <ProjectCard key={project.slug} project={project} index={index} total={projects.length} />
+        <ProjectCard key={project.id} project={project} index={index} total={projects.length} />
       ))}
     </div>
   )
@@ -257,13 +284,20 @@ function ProjectCard({ project, index, total }: ProjectCardProps) {
         zIndex: total - index,
       }}
     >
-      <Image
-        src={project.imageUrl}
-        alt={`Visuel du projet ${project.client}`}
-        fill
-        sizes="32rem"
-        className="object-cover"
-      />
+      {project.imageUrl ? (
+        <Image
+          src={project.imageUrl}
+          alt={project.imageAlt}
+          fill
+          sizes="32rem"
+          className="object-cover"
+          unoptimized={isLocalMediaUrl(project.imageUrl)}
+        />
+      ) : (
+        <div className="grid h-full place-items-center px-6 text-center text-sm text-muted-foreground">
+          Aucun visuel de couverture
+        </div>
+      )}
       <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_56%,rgb(0_0_0/0.34))]" />
       <div className="absolute bottom-4 left-4 rounded-full bg-background/92 px-3 py-1 text-xs font-semibold shadow-sm backdrop-blur">
         {String(index + 1).padStart(2, "0")}
@@ -273,9 +307,6 @@ function ProjectCard({ project, index, total }: ProjectCardProps) {
 }
 
 function ProjectInfo({ project, index }: ProjectInfoProps) {
-  const category = experienceCategories.find(
-    (experienceCategory) => experienceCategory.slug === project.categorySlug,
-  )
   const layout = infoLayouts[index % infoLayouts.length]
 
   return (
@@ -285,27 +316,42 @@ function ProjectInfo({ project, index }: ProjectInfoProps) {
         className={`absolute left-0 top-0 w-72 origin-center -translate-x-1/2 -translate-y-1/2 ${layout.rotations[0]} rounded-[1rem] bg-[var(--portfolio-hero-accent)] px-5 py-4 text-white shadow-[0_20px_50px_color-mix(in_oklch,var(--portfolio-hero-accent),transparent_76%)] will-change-transform`}
       >
         <p className="mb-2 text-xs uppercase tracking-normal text-white/70">
-          {category?.label} / {project.client}
+          {project.category} / {project.company}
         </p>
         <h3 className="text-3xl font-semibold leading-[1.02] tracking-normal text-balance">
           {project.title}
         </h3>
-        <p className="mt-4 text-sm font-semibold text-white/80">{project.period}</p>
+        {project.period ? (
+          <p className="mt-4 text-sm font-semibold text-white/80">
+            {project.period}
+          </p>
+        ) : null}
       </div>
 
       <div
         data-info-part
         className={`absolute left-0 top-0 w-80 origin-center -translate-x-1/2 -translate-y-1/2 ${layout.rotations[1]} rounded-[1rem] border border-foreground/12 bg-background px-5 py-4 shadow-[0_18px_45px_rgb(0_0_0/0.1)] will-change-transform`}
       >
-        <p className="text-base leading-7">{project.summary}</p>
+        <p className="max-w-full text-base leading-7 [overflow-wrap:anywhere]">
+          {project.summary}
+        </p>
+        <Button
+          asChild
+          className="pointer-events-auto mt-5 w-fit bg-[var(--portfolio-hero-accent)] text-white hover:bg-[color-mix(in_oklch,var(--portfolio-hero-accent),black_12%)]"
+        >
+          <Link href={project.href}>
+            Voir le projet
+            <ArrowUpRightIcon data-icon="inline-end" />
+          </Link>
+        </Button>
       </div>
 
       <div
         data-info-part
         className={`absolute left-0 top-0 flex w-80 origin-center -translate-x-1/2 -translate-y-1/2 ${layout.rotations[2]} flex-wrap gap-2 rounded-[1rem] border border-white/12 bg-[rgb(0_0_0/0.88)] p-4 text-white shadow-[0_18px_45px_rgb(0_0_0/0.22)] ring-1 ring-white/10 backdrop-blur will-change-transform`}
       >
-        {[...project.tools, ...project.apps].slice(0, 6).map((tool) => (
-          <ToolBadge key={`${project.slug}-${tool}`} tool={tool} />
+        {project.tools.slice(0, 6).map((tool) => (
+          <ToolBadge key={`${project.id}-${tool}`} tool={tool} />
         ))}
       </div>
     </div>
@@ -327,26 +373,66 @@ function MobileProjectCard({ project, index }: ProjectInfoProps) {
   return (
     <article className="border-t border-foreground/15 py-8 last:border-b">
       <div className="relative aspect-[4/3] overflow-hidden rounded-[1.25rem] bg-muted">
-        <Image
-          src={project.imageUrl}
-          alt={`Visuel du projet ${project.client}`}
-          fill
-          sizes="(max-width: 1023px) calc(100vw - 2rem), 1px"
-          className="object-cover"
-        />
+        {project.imageUrl ? (
+          <Image
+            src={project.imageUrl}
+            alt={project.imageAlt}
+            fill
+            sizes="(max-width: 1023px) calc(100vw - 2rem), 1px"
+            className="object-cover"
+            unoptimized={isLocalMediaUrl(project.imageUrl)}
+          />
+        ) : (
+          <div className="grid h-full place-items-center px-6 text-center text-sm text-muted-foreground">
+            Aucun visuel de couverture
+          </div>
+        )}
       </div>
       <div className="mt-5 flex flex-col gap-4">
         <p className="text-sm text-muted-foreground">
-          {String(index + 1).padStart(2, "0")} / {project.client}
+          {String(index + 1).padStart(2, "0")} / {project.company}
         </p>
         <h3 className="font-heading text-4xl font-semibold tracking-normal">{project.title}</h3>
-        <p className="text-base leading-7 text-muted-foreground">{project.summary}</p>
-        <div className="flex flex-wrap gap-2 rounded-[1rem] bg-[rgb(0_0_0/0.88)] p-4">
-          {[...project.tools, ...project.apps].slice(0, 6).map((tool) => (
-            <ToolBadge key={`${project.slug}-mobile-${tool}`} tool={tool} />
-          ))}
-        </div>
+        <p className="max-w-full text-base leading-7 text-muted-foreground [overflow-wrap:anywhere]">
+          {project.summary}
+        </p>
+        {project.tools.length > 0 ? (
+          <div className="flex flex-wrap gap-2 rounded-[1rem] bg-[rgb(0_0_0/0.88)] p-4">
+            {project.tools.slice(0, 6).map((tool) => (
+              <ToolBadge key={`${project.id}-mobile-${tool}`} tool={tool} />
+            ))}
+          </div>
+        ) : null}
+        <Button asChild className="w-fit bg-[var(--portfolio-hero-accent)] text-white hover:bg-[color-mix(in_oklch,var(--portfolio-hero-accent),black_12%)]">
+          <Link href={project.href}>
+            Voir le projet
+            <ArrowUpRightIcon data-icon="inline-end" />
+          </Link>
+        </Button>
       </div>
     </article>
   )
+}
+
+function EmptyFavoriteProjectsState() {
+  return (
+    <div className="w-full rounded-[1.25rem] border border-foreground/10 bg-card px-6 py-12 text-center shadow-[0_18px_55px_rgb(0_0_0/0.08)]">
+      <p className="text-sm uppercase tracking-[0.18em] text-[var(--portfolio-hero-accent)]">
+        Selection
+      </p>
+      <p className="mx-auto mt-3 max-w-xl text-base leading-7 text-muted-foreground">
+        Les projets favoris seront bientot disponibles.
+      </p>
+    </div>
+  )
+}
+
+function isLocalMediaUrl(url: string) {
+  try {
+    const mediaUrl = new URL(url)
+
+    return mediaUrl.hostname === "localhost" || mediaUrl.hostname === "127.0.0.1"
+  } catch {
+    return false
+  }
 }

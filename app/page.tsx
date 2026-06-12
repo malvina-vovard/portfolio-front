@@ -6,6 +6,7 @@ import {
   getContactContent,
 } from "@/lib/home-content/get-home-content"
 import { getProfessionalExperiences } from "@/lib/professional-experiences/get-professional-experiences"
+import { getFavoriteProjects } from "@/lib/projects/get-project"
 
 export default async function Home() {
   const [
@@ -13,11 +14,13 @@ export default async function Home() {
     aboutContent,
     contactContent,
     professionalExperiences,
+    favoriteProjects,
   ] = await Promise.all([
     getAppConfiguration(),
     getAboutContent(),
     getContactContent(),
     getProfessionalExperiences(),
+    getFavoriteProjects(),
   ])
 
   return (
@@ -26,6 +29,7 @@ export default async function Home() {
         about={aboutContent}
         contact={contactContent}
         professionalExperiences={professionalExperiences}
+        favoriteProjects={favoriteProjects}
       />
     </div>
   )
