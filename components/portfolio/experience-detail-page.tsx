@@ -1,126 +1,201 @@
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowLeftIcon, ImageIcon, VideoIcon } from "lucide-react"
+import { ArrowLeftIcon } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
-import type { Experience, ExperienceCategory } from "@/lib/portfolio/portfolio-data"
+import { getStrapiMediaUrl } from "@/lib/strapi/media"
+import type { ExperienceCategory } from "@/lib/portfolio/portfolio-data"
+import type { LigneMedia, ProjectMedia, ProjectWithMedia } from "@/types/project"
 
 type ExperienceDetailPageProps = {
   category: ExperienceCategory
-  experience: Experience
+  project: ProjectWithMedia
 }
 
 export function ExperienceDetailPage({
   category,
-  experience,
+  project,
 }: ExperienceDetailPageProps) {
+  const tools = getProjectTools(project.outils)
+  const mediaRows = project.ligne_medias ?? []
+
   return (
     <main className="px-4 py-10 sm:px-6 lg:px-8">
-        <article className="mx-auto flex max-w-7xl flex-col gap-6">
-          <Button asChild variant="ghost" className="w-fit">
-            <Link href={`/experiences/${category.slug}`}>
-              <ArrowLeftIcon data-icon="inline-start" />
-              {category.label}
-            </Link>
-          </Button>
+      <article className="mx-auto flex max-w-5xl flex-col gap-8">
+        <Button
+          asChild
+          variant="ghost"
+          className="w-fit text-[var(--portfolio-hero-accent)] hover:bg-[var(--portfolio-hero-accent)]/10 hover:text-[var(--portfolio-hero-accent)]"
+        >
+          <Link href={`/experiences/${category.slug}`}>
+            <ArrowLeftIcon data-icon="inline-start" />
+            {category.label}
+          </Link>
+        </Button>
 
-          <section className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
-            <div className="relative min-h-[34rem] overflow-hidden rounded-[2rem] bg-card p-4 shadow-md ring-1 ring-foreground/5">
-              <div className="relative min-h-[calc(34rem-2rem)] overflow-hidden rounded-[1.4rem]">
-              <Image
-                src={experience.imageUrl}
-                alt={`Image principale du projet ${experience.client}`}
-                fill
-                sizes="(min-width: 1024px) 58vw, 100vw"
-                className="object-cover"
-              />
+        <header className="flex max-w-5xl flex-col gap-4">
+          {project.date ? (
+            <time
+              dateTime={project.date}
+              className="text-sm font-medium uppercase text-muted-foreground"
+            >
+              {formatProjectDate(project.date)}
+            </time>
+          ) : null}
+
+          <h1 className="bebas-neue-regular text-7xl font-medium leading-[0.85] tracking-normal text-balance sm:text-8xl">
+            {project.titre}
+          </h1>
+
+          {project.sous_titre ? (
+            <p className="text-base uppercase tracking-[0.2em] text-muted-foreground sm:text-lg">
+              {project.sous_titre}
+            </p>
+          ) : null}
+
+          {project.description ? (
+            <p className="max-w-full break-words text-base leading-8 text-foreground/82">
+              {project.description}
+            </p>
+          ) : null}
+
+          {tools.length > 0 ? (
+            <div className="flex flex-col gap-2 pt-1">
+              <p className="text-sm font-medium text-foreground">
+                Outils et apps
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {tools.map((tool) => (
+                  <Badge
+                    key={tool}
+                    variant="outline"
+                    className="rounded-md border-foreground/10 bg-white px-3! py-4! text-sm leading-7 text-foreground/80 shadow-sm"
+                  >
+                    {tool}
+                  </Badge>
+                ))}
               </div>
             </div>
-            <Card className="justify-between rounded-[2rem]">
-              <CardHeader>
-                <CardDescription>
-                  {category.label} · {experience.period}
-                </CardDescription>
-                <CardTitle className="text-5xl leading-none">
-                  {experience.client}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="flex flex-col gap-8">
-                <h1 className="text-2xl font-medium">{experience.title}</h1>
-                <p className="text-lg leading-8 text-muted-foreground">
-                  {experience.summary}
-                </p>
-                <Separator />
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <MetadataGroup title="Outils" values={experience.tools} />
-                  <MetadataGroup title="Apps" values={experience.apps} />
-                </div>
-              </CardContent>
-            </Card>
-          </section>
+          ) : null}
+        </header>
 
-          <section className="grid gap-4 lg:grid-cols-[0.75fr_1.25fr]">
-            <Card className="rounded-[2rem] bg-[var(--portfolio-secondary)]">
-              <CardHeader>
-                <CardDescription>Galerie projet</CardDescription>
-                <CardTitle>Texte, outils, images et videos.</CardTitle>
-              </CardHeader>
-              <CardContent className="flex flex-col gap-4 text-sm leading-6 text-muted-foreground">
-                <p>
-                  Les supports du projet rassemblent le contexte, les choix creatifs,
-                  les outils mobilises et les medias les plus representatifs.
-                </p>
-                <div className="flex gap-2">
-                  <Badge variant="outline">
-                    <ImageIcon data-icon="inline-start" />
-                    Image
-                  </Badge>
-                  <Badge variant="outline">
-                    <VideoIcon data-icon="inline-start" />
-                    Video
-                  </Badge>
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="rounded-[2rem]">
-              <CardHeader>
-                <CardDescription>Recit projet</CardDescription>
-                <CardTitle>Approche</CardTitle>
-              </CardHeader>
-              <CardContent className="flex flex-col gap-5">
-                {experience.content.map((paragraph) => (
-                  <p key={paragraph} className="leading-8 text-muted-foreground">
-                    {paragraph}
-                  </p>
-                ))}
-              </CardContent>
-            </Card>
+        {mediaRows.length > 0 ? (
+          <section className="flex flex-col gap-5">
+            {mediaRows.map((row) => (
+              <ProjectMediaRow key={row.documentId ?? row.id} row={row} />
+            ))}
           </section>
-        </article>
-      </main>
+        ) : null}
+      </article>
+    </main>
   )
 }
 
-function MetadataGroup({ title, values }: { title: string; values: string[] }) {
+function getProjectTools(tools?: string | null) {
   return (
-    <div className="flex flex-col gap-2">
-      <p className="text-sm font-medium">{title}</p>
-      <div className="flex flex-wrap gap-2">
-        {values.map((value) => (
-          <Badge key={value} variant="secondary">
-            {value}
-          </Badge>
-        ))}
+    tools
+      ?.split(",")
+      .map((tool) => tool.trim())
+      .filter(Boolean) ?? []
+  )
+}
+
+function formatProjectDate(date: string) {
+  return new Intl.DateTimeFormat("fr-FR", {
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(date))
+}
+
+function ProjectMediaRow({ row }: { row: LigneMedia }) {
+  const medias = (row.medias ?? []).slice(0, 2).filter(isSupportedMedia)
+
+  if (medias.length === 0) {
+    return null
+  }
+
+  if (medias.length === 1) {
+    return (
+      <div className="relative aspect-video w-full overflow-hidden rounded-[1.25rem] bg-muted">
+        <ProjectMediaItem media={medias[0]} sizes="(max-width: 1024px) 100vw, 1024px" />
       </div>
+    )
+  }
+
+  return (
+    <div className="grid w-full gap-5 sm:grid-cols-2">
+      {medias.map((media) => (
+        <div
+          key={media.documentId ?? media.id}
+          className="relative aspect-square overflow-hidden rounded-[1.25rem] bg-muted"
+        >
+          <ProjectMediaItem
+            media={media}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 502px"
+          />
+        </div>
+      ))}
     </div>
   )
+}
+
+function ProjectMediaItem({
+  media,
+  sizes,
+}: {
+  media: ProjectMedia
+  sizes: string
+}) {
+  const url = getMediaUrl(media)
+
+  if (!url) {
+    return null
+  }
+
+  if (media.mime?.startsWith("video/")) {
+    return (
+      <video
+        className="h-full w-full bg-black object-cover"
+        controls
+        playsInline
+        preload="metadata"
+        src={url}
+      />
+    )
+  }
+
+  return (
+    <Image
+      src={url}
+      alt={media.alternativeText ?? media.caption ?? media.name}
+      fill
+      sizes={sizes}
+      className="object-cover"
+      unoptimized={isLocalMediaUrl(url)}
+    />
+  )
+}
+
+function isSupportedMedia(media: ProjectMedia) {
+  return media.mime?.startsWith("image/") || media.mime?.startsWith("video/")
+}
+
+function getMediaUrl(media: ProjectMedia) {
+  const path = media.mime?.startsWith("image/")
+    ? media.formats?.large?.url ?? media.formats?.medium?.url ?? media.url
+    : media.url
+
+  return getStrapiMediaUrl(path)
+}
+
+function isLocalMediaUrl(url: string) {
+  try {
+    const mediaUrl = new URL(url)
+
+    return mediaUrl.hostname === "localhost" || mediaUrl.hostname === "127.0.0.1"
+  } catch {
+    return false
+  }
 }
