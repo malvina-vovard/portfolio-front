@@ -33,6 +33,7 @@ export const BackgroundGradientAnimation = ({
   interactive?: boolean;
   containerClassName?: string;
 }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const interactiveRef = useRef<HTMLDivElement>(null);
   const currentPositionRef = useRef({ x: 0, y: 0 });
   const targetPositionRef = useRef({ x: 0, y: 0 });
@@ -41,22 +42,28 @@ export const BackgroundGradientAnimation = ({
     /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
   useEffect(() => {
-    document.body.style.setProperty(
+    const container = containerRef.current;
+
+    if (!container) {
+      return;
+    }
+
+    container.style.setProperty(
       "--gradient-background-start",
       gradientBackgroundStart
     );
-    document.body.style.setProperty(
+    container.style.setProperty(
       "--gradient-background-end",
       gradientBackgroundEnd
     );
-    document.body.style.setProperty("--first-color", firstColor);
-    document.body.style.setProperty("--second-color", secondColor);
-    document.body.style.setProperty("--third-color", thirdColor);
-    document.body.style.setProperty("--fourth-color", fourthColor);
-    document.body.style.setProperty("--fifth-color", fifthColor);
-    document.body.style.setProperty("--pointer-color", pointerColor);
-    document.body.style.setProperty("--size", size);
-    document.body.style.setProperty("--blending-value", blendingValue);
+    container.style.setProperty("--first-color", firstColor);
+    container.style.setProperty("--second-color", secondColor);
+    container.style.setProperty("--third-color", thirdColor);
+    container.style.setProperty("--fourth-color", fourthColor);
+    container.style.setProperty("--fifth-color", fifthColor);
+    container.style.setProperty("--pointer-color", pointerColor);
+    container.style.setProperty("--size", size);
+    container.style.setProperty("--blending-value", blendingValue);
   }, [
     blendingValue,
     fifthColor,
@@ -110,6 +117,7 @@ export const BackgroundGradientAnimation = ({
 
   return (
     <div
+      ref={containerRef}
       className={cn(
         "h-screen w-screen relative overflow-hidden top-0 left-0 bg-[linear-gradient(40deg,var(--gradient-background-start),var(--gradient-background-end))]",
         containerClassName
@@ -142,7 +150,7 @@ export const BackgroundGradientAnimation = ({
       >
         <div
           className={cn(
-            `absolute [background:radial-gradient(circle_at_center,_var(--first-color)_0,_var(--first-color)_50%)_no-repeat]`,
+            `absolute [background:radial-gradient(circle_at_center,_rgba(var(--first-color),_0.8)_0,_rgba(var(--first-color),_0)_50%)_no-repeat]`,
             `[mix-blend-mode:var(--blending-value)] w-[var(--size)] h-[var(--size)] top-[calc(50%-var(--size)/2)] left-[calc(50%-var(--size)/2)]`,
             `[transform-origin:center_center]`,
             `animate-first`,

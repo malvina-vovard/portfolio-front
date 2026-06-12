@@ -70,7 +70,7 @@ export function AllProjectsPage() {
                 <Button
                   asChild
                   variant="outline"
-                  className="w-fit border-[var(--portfolio-hero-accent)] bg-[var(--portfolio-hero-accent)] text-white shadow-[0_14px_34px_rgb(247_115_20/0.22)] hover:bg-[var(--portfolio-hero-accent)]/90 hover:text-white"
+                  className="w-fit border-[var(--portfolio-hero-accent)] bg-[var(--portfolio-hero-accent)] text-white shadow-[0_14px_34px_color-mix(in_oklch,var(--portfolio-hero-accent),transparent_78%)] hover:bg-[var(--portfolio-hero-accent)]/90 hover:text-white"
                 >
                   <Link href={`/experiences/${category.slug}`}>
                     Voir la page

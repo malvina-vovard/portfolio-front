@@ -20,7 +20,6 @@ function mapAppConfiguration(
 ): AppConfiguration {
   return {
     primaryColor: getHexColor(attributes?.couleur_principale),
-    secondaryColor: getHexColor(attributes?.couleur_secondaire),
   }
 }
 

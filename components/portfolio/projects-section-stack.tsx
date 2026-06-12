@@ -282,7 +282,7 @@ function ProjectInfo({ project, index }: ProjectInfoProps) {
     <div className="project-stack-info pointer-events-none absolute left-1/2 top-1/2 z-20">
       <div
         data-info-part
-        className={`absolute left-0 top-0 w-72 origin-center -translate-x-1/2 -translate-y-1/2 ${layout.rotations[0]} rounded-[1rem] bg-[var(--portfolio-hero-accent)] px-5 py-4 text-white shadow-[0_20px_50px_rgb(247_115_20/0.24)] will-change-transform`}
+        className={`absolute left-0 top-0 w-72 origin-center -translate-x-1/2 -translate-y-1/2 ${layout.rotations[0]} rounded-[1rem] bg-[var(--portfolio-hero-accent)] px-5 py-4 text-white shadow-[0_20px_50px_color-mix(in_oklch,var(--portfolio-hero-accent),transparent_76%)] will-change-transform`}
       >
         <p className="mb-2 text-xs uppercase tracking-normal text-white/70">
           {category?.label} / {project.client}
