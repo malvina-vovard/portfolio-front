@@ -31,7 +31,9 @@ function getStrapiImageRemotePatterns() {
 }
 
 const nextConfig: NextConfig = {
+  poweredByHeader: false,
   images: {
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
         protocol: "https",
@@ -42,6 +44,7 @@ const nextConfig: NextConfig = {
       ...getStrapiImageRemotePatterns(),
     ],
   },
+  compress: true,
 };
 
 export default nextConfig;

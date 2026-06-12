@@ -1,7 +1,17 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Bebas_Neue, Geist, Geist_Mono, Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/portfolio/site-header";
+import {
+  authorName,
+  defaultDescription,
+  defaultTitle,
+  getAbsoluteUrl,
+  getJsonLd,
+  getSiteUrl,
+  seoKeywords,
+  siteName,
+} from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
@@ -28,10 +38,89 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Malvina - Portfolio",
-  description:
-    "Portfolio dynamique de Malvina: marketing digital, site web et design.",
+  metadataBase: new URL(getSiteUrl()),
+  applicationName: siteName,
+  authors: [{ name: authorName, url: getSiteUrl() }],
+  creator: authorName,
+  publisher: authorName,
+  title: {
+    default: defaultTitle,
+    template: `%s | ${authorName}`,
+  },
+  description: defaultDescription,
+  keywords: seoKeywords,
+  category: "portfolio",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: defaultTitle,
+    description: defaultDescription,
+    url: getSiteUrl(),
+    siteName,
+    locale: "fr_FR",
+    type: "website",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: `${siteName} - marketing digital, design et sites web`,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: defaultTitle,
+    description: defaultDescription,
+    images: ["/opengraph-image"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
 };
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  themeColor: "#ffffff",
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: siteName,
+  url: getSiteUrl(),
+  inLanguage: "fr-FR",
+  description: defaultDescription,
+}
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: authorName,
+  url: getSiteUrl(),
+  jobTitle: "Creatrice digitale",
+  knowsAbout: [
+    "Marketing digital",
+    "Design",
+    "Identite visuelle",
+    "Creation de sites web",
+    "SEO",
+    "Social media",
+  ],
+  image: getAbsoluteUrl("/images/malvina4.jpeg"),
+}
 
 export default function RootLayout({
   children,
@@ -53,6 +142,14 @@ export default function RootLayout({
       )}
     >
       <body className="min-h-full flex flex-col">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: getJsonLd(websiteJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: getJsonLd(personJsonLd) }}
+        />
         <SiteHeader />
         {children}
       </body>

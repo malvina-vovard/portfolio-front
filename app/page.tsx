@@ -7,6 +7,13 @@ import {
 } from "@/lib/home-content/get-home-content"
 import { getProfessionalExperiences } from "@/lib/professional-experiences/get-professional-experiences"
 import { getFavoriteProjects } from "@/lib/projects/get-project"
+import { defaultDescription, defaultTitle, getRouteMetadata } from "@/lib/seo"
+
+export const metadata = getRouteMetadata({
+  title: defaultTitle,
+  description: defaultDescription,
+  path: "/",
+})
 
 export default async function Home() {
   const [

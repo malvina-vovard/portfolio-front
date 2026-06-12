@@ -12,6 +12,7 @@ import {
   experienceCategories,
   getCategoryBySlug,
 } from "@/lib/portfolio/portfolio-data"
+import { getCategoryMetadata } from "@/lib/seo"
 
 type ExperienceCategoryRouteProps = {
   params: Promise<{
@@ -23,6 +24,17 @@ export function generateStaticParams() {
   return experienceCategories.map((category) => ({
     category: category.slug,
   }))
+}
+
+export async function generateMetadata({ params }: ExperienceCategoryRouteProps) {
+  const { category: categorySlug } = await params
+  const category = getCategoryBySlug(getDisplayCategorySlugFromRoute(categorySlug))
+
+  if (!category) {
+    return {}
+  }
+
+  return getCategoryMetadata(category)
 }
 
 export default async function ExperienceCategoryRoute({

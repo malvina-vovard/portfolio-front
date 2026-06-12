@@ -73,23 +73,23 @@ export const experienceCategories: ExperienceCategory[] = [
     label: "Marketing digital",
     title: "Campagnes, acquisition et contenus",
     description:
-      "Strategie editoriale, tunnels de conversion, reporting et coordination de campagnes.",
+      "Stratégie éditoriale, tunnels de conversion, reporting et coordination de campagnes.",
     icon: MegaphoneIcon,
   },
   {
     slug: "site-web",
     label: "Site web",
-    title: "Sites vitrines et parcours web",
+    title: "E-commerce et parcours web",
     description:
-      "Architecture de pages, contenus, wireframes et coordination entre design et developpement.",
+      "Développement de solutions e-commerce et de parcours web centrés sur l'expérience utilisateur.",
     icon: Code2Icon,
   },
   {
     slug: "design",
     label: "Design",
-    title: "Univers visuels et supports de marque",
+    title: "Design graphique et identité visuelle",
     description:
-      "Direction artistique, templates, supports print et assets digitaux coherents.",
+      "Développement de concepts visuels alliant sens du détail et direction artistique.",
     icon: PaletteIcon,
   },
 ]
@@ -292,12 +292,12 @@ export const workTimelineItems: WorkTimelineItem[] = [
 
 export const homeHighlights = [
   {
-    label: "Strategie",
+    label: "Stratégie",
     value: "Positionner",
     icon: TargetIcon,
   },
   {
-    label: "Creation",
+    label: "Création",
     value: "Designer",
     icon: BrushIcon,
   },

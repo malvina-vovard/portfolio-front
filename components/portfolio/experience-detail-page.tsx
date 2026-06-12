@@ -82,8 +82,12 @@ export function ExperienceDetailPage({
 
         {mediaRows.length > 0 ? (
           <section className="flex flex-col gap-5">
-            {mediaRows.map((row) => (
-              <ProjectMediaRow key={row.documentId ?? row.id} row={row} />
+            {mediaRows.map((row, index) => (
+              <ProjectMediaRow
+                key={row.documentId ?? row.id}
+                row={row}
+                preloadFirstImage={index === 0}
+              />
             ))}
           </section>
         ) : null}
@@ -109,7 +113,13 @@ function formatProjectDate(date: string) {
   }).format(new Date(date))
 }
 
-function ProjectMediaRow({ row }: { row: LigneMedia }) {
+function ProjectMediaRow({
+  row,
+  preloadFirstImage,
+}: {
+  row: LigneMedia
+  preloadFirstImage: boolean
+}) {
   const medias = (row.medias ?? []).slice(0, 2).filter(isSupportedMedia)
 
   if (medias.length === 0) {
@@ -119,20 +129,25 @@ function ProjectMediaRow({ row }: { row: LigneMedia }) {
   if (medias.length === 1) {
     return (
       <div className="relative aspect-video w-full overflow-hidden rounded-[1.25rem] bg-muted">
-        <ProjectMediaItem media={medias[0]} sizes="(max-width: 1024px) 100vw, 1024px" />
+        <ProjectMediaItem
+          media={medias[0]}
+          preload={preloadFirstImage}
+          sizes="(max-width: 1024px) 100vw, 1024px"
+        />
       </div>
     )
   }
 
   return (
     <div className="grid w-full gap-5 sm:grid-cols-2">
-      {medias.map((media) => (
+      {medias.map((media, index) => (
         <div
           key={media.documentId ?? media.id}
           className="relative aspect-square overflow-hidden rounded-[1.25rem] bg-muted"
         >
           <ProjectMediaItem
             media={media}
+            preload={preloadFirstImage && index === 0}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 502px"
           />
         </div>
@@ -143,9 +158,11 @@ function ProjectMediaRow({ row }: { row: LigneMedia }) {
 
 function ProjectMediaItem({
   media,
+  preload,
   sizes,
 }: {
   media: ProjectMedia
+  preload: boolean
   sizes: string
 }) {
   const url = getMediaUrl(media)
@@ -173,6 +190,7 @@ function ProjectMediaItem({
       fill
       sizes={sizes}
       className="object-cover"
+      preload={preload}
       unoptimized={isLocalMediaUrl(url)}
     />
   )

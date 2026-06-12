@@ -93,10 +93,12 @@ export function AllProjectsPage() {
 }
 
 function AllProjectCard({ experience }: { experience: Experience }) {
+  const projectHref = `/experiences/${experience.categorySlug}/${experience.slug}`
+
   return (
     <article className="group flex min-h-full flex-col overflow-hidden rounded-[1.5rem] border border-foreground/10 bg-card shadow-[0_18px_55px_rgb(0_0_0/0.08)] transition-transform duration-300 hover:-translate-y-1">
       <Link
-        href={`/experiences/${experience.categorySlug}/${experience.slug}`}
+        href={projectHref}
         className="block p-3"
       >
         <div className="relative aspect-[16/11] overflow-hidden rounded-[1rem] bg-muted">
@@ -140,7 +142,7 @@ function AllProjectCard({ experience }: { experience: Experience }) {
 
         <div className="mt-auto flex justify-end pt-8">
           <Button asChild variant="outline" className="w-fit">
-            <Link href={`/experiences/${experience.categorySlug}/${experience.slug}`}>
+            <Link href={projectHref}>
               Voir le projet
               <ArrowRightIcon data-icon="inline-end" />
             </Link>
