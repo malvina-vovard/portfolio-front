@@ -1,4 +1,4 @@
-import { strapiFetch } from "@/lib/strapi/api"
+import { isStrapiRequestError, strapiFetch } from "@/lib/strapi/api"
 import type { StrapiResponse } from "@/lib/strapi/types"
 import type {
   AppConfiguration,
@@ -24,13 +24,21 @@ function mapAppConfiguration(
 }
 
 export async function getAppConfiguration() {
-  const response = await strapiFetch<
-    StrapiResponse<AppConfigurationAttributes | null>
-  >("/app-configuration", {
-    next: {
-      tags: ["app-configuration"],
-    },
-  })
+  try {
+    const response = await strapiFetch<
+      StrapiResponse<AppConfigurationAttributes | null>
+    >("/app-configuration", {
+      next: {
+        tags: ["app-configuration"],
+      },
+    })
 
-  return mapAppConfiguration(response.data)
+    return mapAppConfiguration(response.data)
+  } catch (error) {
+    if (isStrapiRequestError(error)) {
+      return mapAppConfiguration(null)
+    }
+
+    throw error
+  }
 }

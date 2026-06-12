@@ -32,7 +32,7 @@ Expected Strapi fields:
 
 The colors are validated as hex colors before being applied to portfolio CSS variables.
 
-The frontend must fail visibly if `STRAPI_API_URL` is missing or if Strapi cannot be reached for app configuration. Do not silently replace backend configuration with hardcoded theme values.
+The frontend must keep rendering if Strapi is unavailable. Strapi-backed modules should catch expected API/network/configuration failures and return neutral content such as `null`, an empty list, or no app color override instead of throwing during render.
 
 ## UI Components
 

@@ -29,6 +29,20 @@ export class StrapiApiError extends Error {
   }
 }
 
+export class StrapiConnectionError extends Error {
+  readonly path: string
+
+  constructor(path: string, cause: unknown) {
+    super(`Strapi request could not be completed for ${path}`, { cause })
+    this.name = "StrapiConnectionError"
+    this.path = path
+  }
+}
+
+export function isStrapiRequestError(error: unknown) {
+  return error instanceof StrapiApiError || error instanceof StrapiConnectionError
+}
+
 const STRAPI_API_PATH_PREFIX = "/api"
 
 function normalizeApiPath(path: string) {
@@ -126,11 +140,25 @@ export async function strapiFetch<TResponse>(
     requestHeaders.set("Content-Type", "application/json")
   }
 
-  const response = await fetch(buildStrapiApiUrl(path, query), {
-    ...fetchOptions,
-    body: requestBody,
-    headers: requestHeaders,
-  })
+  let url: URL
+
+  try {
+    url = buildStrapiApiUrl(path, query)
+  } catch (error) {
+    throw new StrapiConnectionError(path, error)
+  }
+
+  let response: Response
+
+  try {
+    response = await fetch(url, {
+      ...fetchOptions,
+      body: requestBody,
+      headers: requestHeaders,
+    })
+  } catch (error) {
+    throw new StrapiConnectionError(url.toString(), error)
+  }
 
   if (!response.ok) {
     throw new StrapiApiError(response, await readResponseBody(response))

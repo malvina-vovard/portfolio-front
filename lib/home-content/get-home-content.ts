@@ -1,6 +1,6 @@
 import "server-only"
 
-import { StrapiApiError, strapiFetch } from "@/lib/strapi/api"
+import { isStrapiRequestError, strapiFetch } from "@/lib/strapi/api"
 import { getStrapiMediaUrl } from "@/lib/strapi/media"
 import type { StrapiResponse } from "@/lib/strapi/types"
 import type {
@@ -69,7 +69,7 @@ export async function getAboutContent() {
 
     return mapAboutContent(response.data)
   } catch (error) {
-    if (error instanceof StrapiApiError) {
+    if (isStrapiRequestError(error)) {
       return mapAboutContent(null)
     }
 
@@ -89,7 +89,7 @@ export async function getContactContent() {
 
     return mapContactContent(response.data)
   } catch (error) {
-    if (error instanceof StrapiApiError) {
+    if (isStrapiRequestError(error)) {
       return mapContactContent(null)
     }
 

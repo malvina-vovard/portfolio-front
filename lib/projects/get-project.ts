@@ -1,6 +1,6 @@
 import "server-only"
 
-import { strapiFetch } from "@/lib/strapi/api"
+import { isStrapiRequestError, strapiFetch } from "@/lib/strapi/api"
 import type { StrapiCollectionResponse } from "@/lib/strapi/types"
 import type {
   ProjectCategory,
@@ -9,57 +9,73 @@ import type {
 } from "@/types/project"
 
 export async function getProjectsByCategory(category: ProjectCategory) {
-  const response = await strapiFetch<StrapiCollectionResponse<ProjectWithCover>>(
-    "/projets",
-    {
-      query: {
-        filters: {
-          categorie: {
-            $eq: category,
+  try {
+    const response = await strapiFetch<StrapiCollectionResponse<ProjectWithCover>>(
+      "/projets",
+      {
+        query: {
+          filters: {
+            categorie: {
+              $eq: category,
+            },
+          },
+          populate: {
+            couverture: true,
           },
         },
-        populate: {
-          couverture: true,
+        next: {
+          revalidate: 60,
+          tags: ["projects", `projects:${category}`],
         },
       },
-      next: {
-        revalidate: 60,
-        tags: ["projects", `projects:${category}`],
-      },
-    },
-  )
+    )
 
-  return response.data
+    return response.data
+  } catch (error) {
+    if (isStrapiRequestError(error)) {
+      return []
+    }
+
+    throw error
+  }
 }
 
 export async function getProjectByTitleAndCategory(
   title: string,
   category: ProjectCategory,
 ) {
-  const response = await strapiFetch<StrapiCollectionResponse<ProjectWithMedia>>(
-    "/projets",
-    {
-      query: {
-        filters: {
-          titre: {
-            $eq: title,
+  try {
+    const response = await strapiFetch<StrapiCollectionResponse<ProjectWithMedia>>(
+      "/projets",
+      {
+        query: {
+          filters: {
+            titre: {
+              $eq: title,
+            },
+            categorie: {
+              $eq: category,
+            },
           },
-          categorie: {
-            $eq: category,
+          populate: {
+            ligne_medias: {
+              populate: "medias",
+            },
           },
         },
-        populate: {
-          ligne_medias: {
-            populate: "medias",
-          },
+        next: {
+          revalidate: 60,
+          tags: ["projects", `project:${category}:${title}`],
         },
       },
-      next: {
-        revalidate: 60,
-        tags: ["projects", `project:${category}:${title}`],
-      },
-    },
-  )
+    )
 
-  return response.data[0] ?? null
+    return response.data[0] ?? null
+  } catch (error) {
+    if (isStrapiRequestError(error)) {
+      return null
+    }
+
+    throw error
+  }
 }

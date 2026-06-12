@@ -14,13 +14,23 @@ export function getStrapiMediaUrl(path?: string | null) {
 
   const normalizedPath = path.startsWith("/") ? path : `/${path}`
 
-  return `${getRequiredStrapiMediaBaseUrl()}${normalizedPath}`
+  const mediaBaseUrl = getStrapiMediaBaseUrl()
+
+  if (!mediaBaseUrl) {
+    return null
+  }
+
+  return `${mediaBaseUrl}${normalizedPath}`
 }
 
-function getRequiredStrapiMediaBaseUrl() {
+function getStrapiMediaBaseUrl() {
   try {
     return getRequiredPublicStrapiApiUrl()
   } catch {
-    return getRequiredStrapiApiUrl()
+    try {
+      return getRequiredStrapiApiUrl()
+    } catch {
+      return null
+    }
   }
 }
