@@ -40,6 +40,33 @@ export async function getFavoriteProjects() {
   }
 }
 
+export async function getAllProjects() {
+  try {
+    const response = await strapiFetch<StrapiCollectionResponse<ProjectWithCover>>(
+      "/projets",
+      {
+        query: {
+          populate: {
+            couverture: true,
+          },
+        },
+        next: {
+          revalidate: 60,
+          tags: ["projects"],
+        },
+      },
+    )
+
+    return response.data
+  } catch (error) {
+    if (isStrapiRequestError(error)) {
+      return []
+    }
+
+    throw error
+  }
+}
+
 export async function getProjectsByCategory(category: ProjectCategory) {
   try {
     const response = await strapiFetch<StrapiCollectionResponse<ProjectWithCover>>(

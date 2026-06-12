@@ -1,6 +1,7 @@
 import { AllProjectsPage } from "@/components/portfolio/all-projects-page"
 import { getAppConfiguration } from "@/lib/app-configuration/get-app-configuration"
 import { getPortfolioThemeStyle } from "@/lib/app-configuration/theme-style"
+import { getAllProjects } from "@/lib/projects/get-project"
 import { getRouteMetadata } from "@/lib/seo"
 
 export const metadata = getRouteMetadata({
@@ -12,11 +13,14 @@ export const metadata = getRouteMetadata({
 })
 
 export default async function ProjectsRoute() {
-  const configuration = await getAppConfiguration()
+  const [configuration, projects] = await Promise.all([
+    getAppConfiguration(),
+    getAllProjects(),
+  ])
 
   return (
     <div style={getPortfolioThemeStyle(configuration)}>
-      <AllProjectsPage />
+      <AllProjectsPage projects={projects} />
     </div>
   )
 }
