@@ -98,14 +98,14 @@ function ProjectFeatureCard({
   const projectHref = `/experiences/${category.slug}/${getProjectRouteTitle(project.titre)}`
 
   return (
-    <article className="relative overflow-hidden rounded-[1.5rem] border border-foreground/10 bg-card shadow-[0_24px_70px_rgb(0_0_0/0.1)]">
+    <article className="relative min-w-0 overflow-hidden rounded-[1.5rem] border border-foreground/10 bg-card shadow-[0_24px_70px_rgb(0_0_0/0.1)]">
       <div
         className={[
-          "grid gap-0 lg:grid-cols-2",
+          "grid min-w-0 gap-0 lg:grid-cols-2",
           isReversed ? "lg:[&>*:first-child]:order-2" : "",
         ].join(" ")}
       >
-        <Link href={projectHref} className="group block p-4 sm:p-6">
+        <Link href={projectHref} className="group block min-w-0 p-4 sm:p-6">
           <div className="overflow-hidden rounded-[1rem] border border-foreground/10 bg-background shadow-[0_18px_55px_rgb(0_0_0/0.12)]">
             <div className="flex h-10 items-center gap-2 border-b border-foreground/10 bg-muted px-4">
               <span className="size-2.5 rounded-full bg-[#ff5f57]" />
@@ -138,8 +138,8 @@ function ProjectFeatureCard({
           </div>
         </Link>
 
-        <div className="flex min-h-[28rem] flex-col justify-between p-6 sm:p-8 lg:p-10">
-          <div>
+        <div className="flex min-w-0 flex-col justify-between p-6 sm:min-h-[28rem] sm:p-8 lg:p-10">
+          <div className="min-w-0">
             {project.date ? (
               <div className="mb-6 flex items-center justify-between gap-5">
                 <span className="rounded-full border border-foreground/12 px-3 py-1 text-xs font-medium uppercase text-muted-foreground">
@@ -153,11 +153,11 @@ function ProjectFeatureCard({
                 {project.sous_titre}
               </p>
             ) : null}
-            <h2 className="bebas-neue-regular mt-3 max-w-xl text-5xl font-semibold leading-[0.9] tracking-normal text-balance sm:text-6xl">
+            <h2 className="bebas-neue-regular mt-3 max-w-xl break-words text-5xl font-semibold leading-[0.9] tracking-normal text-balance sm:text-6xl">
               {project.titre}
             </h2>
             {project.mini_description ? (
-              <p className="mt-5 max-w-xl break-words text-base leading-7 text-muted-foreground">
+              <p className="mt-5 max-w-xl overflow-hidden text-base leading-7 text-muted-foreground [display:-webkit-box] [overflow-wrap:anywhere] [-webkit-box-orient:vertical] [-webkit-line-clamp:6] sm:[-webkit-line-clamp:8]">
                 {project.mini_description}
               </p>
             ) : null}

@@ -30,7 +30,7 @@ export function ContactSection({ contact }: ContactSectionProps) {
   return (
     <section
       id="contact"
-      className="relative -mt-24 overflow-hidden bg-black px-4 pb-12 pt-40 text-white sm:px-6 sm:pb-16 lg:px-8 lg:pb-20 lg:pt-48"
+      className="relative overflow-hidden bg-black px-4 pb-12 pt-20 text-white sm:px-6 sm:pb-16 sm:pt-24 lg:px-8 lg:pb-20 lg:pt-28"
     >
       <div
         aria-hidden="true"

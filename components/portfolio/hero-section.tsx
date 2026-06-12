@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, type MouseEvent } from "react"
+import Image from "next/image"
 import Link from "next/link"
 import { ArrowUpRightIcon } from "lucide-react"
 import gsap from "gsap"
@@ -119,10 +120,14 @@ export function HeroSection() {
       ref={sectionRef}
       className="relative h-[calc(100svh-5rem)] overflow-hidden bg-background px-4 sm:px-6 lg:px-8"
     >
-      <div
-        className="hero-background-layer absolute inset-0 bg-cover bg-center will-change-transform"
-        style={{ backgroundImage: `url(${HERO_BACKGROUND_IMAGE_URL})` }}
+      <Image
+        src={HERO_BACKGROUND_IMAGE_URL}
+        alt=""
+        fill
+        sizes="100vw"
+        preload
         aria-hidden="true"
+        className="hero-background-layer object-cover will-change-transform"
       />
       {/* <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_22%,rgb(255_255_255/0.84),transparent_34%),linear-gradient(90deg,rgb(255_255_255/0.88)_0%,rgb(255_255_255/0.34)_48%,rgb(255_255_255/0.82)_100%)]" /> */}
       <div className="hero-grid-background portfolio-grid-background absolute inset-0 opacity-60 will-change-transform" />

@@ -16,8 +16,10 @@ export function PortfolioHome({ about, contact }: PortfolioHomeProps) {
       <HeroSection />
       <AboutSection about={about} contact={contact} />
       <ProfessionalExperienceSection />
-      <ProjectsSectionStack />
-      <ContactSection contact={contact} />
+      <div className="bg-black">
+        <ProjectsSectionStack />
+        <ContactSection contact={contact} />
+      </div>
     </main>
   )
 }
