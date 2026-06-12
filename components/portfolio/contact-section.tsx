@@ -1,21 +1,32 @@
 import { ExternalLinkIcon, MailIcon } from "lucide-react"
 
-const contactLinks = [
-  {
-    href: "mailto:contact@malvina.fr",
-    icon: MailIcon,
-    label: "Email",
-    value: "contact@malvina.fr",
-  },
-  {
-    href: "https://www.linkedin.com/in/malvina",
-    icon: ExternalLinkIcon,
-    label: "LinkedIn",
-    value: "/in/malvina",
-  },
-]
+import type { ContactContent } from "@/types/home-content"
 
-export function ContactSection() {
+const DEFAULT_EMAIL = "contact@malvina.fr"
+const DEFAULT_LINKEDIN = "https://www.linkedin.com/in/malvina"
+
+type ContactSectionProps = {
+  contact: ContactContent
+}
+
+export function ContactSection({ contact }: ContactSectionProps) {
+  const email = contact.email ?? DEFAULT_EMAIL
+  const linkedin = contact.linkedin ?? DEFAULT_LINKEDIN
+  const contactLinks = [
+    {
+      href: `mailto:${email}`,
+      icon: MailIcon,
+      label: "Email",
+      value: email,
+    },
+    {
+      href: linkedin,
+      icon: ExternalLinkIcon,
+      label: "LinkedIn",
+      value: getLinkedInLabel(linkedin),
+    },
+  ]
+
   return (
     <section
       id="contact"
@@ -44,7 +55,7 @@ export function ContactSection() {
           </h2>
         </div>
 
-        <div className="mt-16 grid gap-3 sm:max-w-xl sm:grid-cols-2">
+        <div className="mt-16 grid gap-8 sm:max-w-3xl sm:grid-cols-2">
           {contactLinks.map((link) => {
             const Icon = link.icon
 
@@ -52,13 +63,15 @@ export function ContactSection() {
               <a
                 key={link.href}
                 href={link.href}
-                className="group flex min-h-24 items-center justify-between gap-5 border-t border-white/18 py-5 transition-colors hover:border-[var(--portfolio-hero-accent)]"
+                className="group flex min-h-24 min-w-0 items-center justify-between gap-5 border-t border-white/18 py-5 transition-colors hover:border-[var(--portfolio-hero-accent)]"
               >
-                <span>
+                <span className="min-w-0">
                   <span className="block text-xs uppercase tracking-[0.22em] text-white/45">
                     {link.label}
                   </span>
-                  <span className="mt-2 block text-lg font-medium text-white">{link.value}</span>
+                  <span className="mt-2 block break-words text-lg font-medium text-white">
+                    {link.value}
+                  </span>
                 </span>
                 <span className="grid size-11 shrink-0 place-items-center rounded-full border border-white/18 text-white transition-colors group-hover:border-[var(--portfolio-hero-accent)] group-hover:text-[var(--portfolio-hero-accent)]">
                   <Icon aria-hidden="true" className="size-5" />
@@ -70,4 +83,14 @@ export function ContactSection() {
       </div>
     </section>
   )
+}
+
+function getLinkedInLabel(linkedin: string) {
+  try {
+    const url = new URL(linkedin)
+
+    return url.pathname.replace(/\/$/, "") || linkedin
+  } catch {
+    return linkedin
+  }
 }

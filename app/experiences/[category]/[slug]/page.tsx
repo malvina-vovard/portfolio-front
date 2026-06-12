@@ -3,12 +3,16 @@ import { notFound } from "next/navigation"
 import { ExperienceDetailPage } from "@/components/portfolio/experience-detail-page"
 import { getAppConfiguration } from "@/lib/app-configuration/get-app-configuration"
 import { getPortfolioThemeStyle } from "@/lib/app-configuration/theme-style"
+import {
+  getDisplayCategorySlugFromRoute,
+  getProjectCategoryFromRoute,
+  getProjectTitleFromRoute,
+} from "@/lib/projects/categories"
 import { getProjectByTitleAndCategory } from "@/lib/projects/get-project"
 import {
   featuredExperiences,
   getCategoryBySlug,
 } from "@/lib/portfolio/portfolio-data"
-import type { ProjectCategory } from "@/types/project"
 
 type ExperienceDetailRouteProps = {
   params: Promise<{
@@ -24,32 +28,8 @@ export function generateStaticParams() {
   }))
 }
 
-function getProjectCategoryFromRoute(categorySlug: string): ProjectCategory | null {
-  const categoriesByRoute: Record<string, ProjectCategory> = {
-    design: "design",
-    "marketing-digital": "marketing_digital",
-    marketing_digital: "marketing_digital",
-    "site-web": "website",
-    website: "website",
-  }
-
-  return categoriesByRoute[categorySlug] ?? null
-}
-
 function getDisplayCategoryFromRoute(categorySlug: string) {
-  const displaySlugByRoute: Record<string, string> = {
-    design: "design",
-    "marketing-digital": "marketing-digital",
-    marketing_digital: "marketing-digital",
-    "site-web": "site-web",
-    website: "site-web",
-  }
-
-  return getCategoryBySlug(displaySlugByRoute[categorySlug] ?? categorySlug)
-}
-
-function getProjectTitleFromSlug(slug: string) {
-  return decodeURIComponent(slug).replaceAll("-", " ")
+  return getCategoryBySlug(getDisplayCategorySlugFromRoute(categorySlug))
 }
 
 export default async function ExperienceDetailRoute({
@@ -64,7 +44,7 @@ export default async function ExperienceDetailRoute({
   }
 
   const project = await getProjectByTitleAndCategory(
-    getProjectTitleFromSlug(slug),
+    getProjectTitleFromRoute(slug),
     projectCategory,
   )
 

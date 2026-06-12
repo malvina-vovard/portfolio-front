@@ -21,7 +21,6 @@ function mapAppConfiguration(
   return {
     primaryColor: getHexColor(attributes?.couleur_principale),
     secondaryColor: getHexColor(attributes?.couleur_secondaire),
-    aboutDescription: attributes?.description ?? null,
   }
 }
 

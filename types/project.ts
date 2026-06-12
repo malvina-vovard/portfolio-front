@@ -6,6 +6,7 @@ export type Project = {
   titre: string
   categorie: ProjectCategory
   description?: string | null
+  mini_description?: string | null
   date?: string | null
   outils?: string | null
   sous_titre?: string | null
@@ -41,5 +42,11 @@ export type LigneMedia = StrapiEntity<{
 export type ProjectWithMedia = StrapiEntity<
   Project & {
     ligne_medias?: LigneMedia[] | null
+  }
+>
+
+export type ProjectWithCover = StrapiEntity<
+  Project & {
+    couverture?: ProjectMedia | null
   }
 >

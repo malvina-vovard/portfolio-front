@@ -4,16 +4,19 @@ import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import type { Experience, ExperienceCategory } from "@/lib/portfolio/portfolio-data"
+import { getProjectRouteTitle } from "@/lib/projects/categories"
+import { getStrapiMediaUrl } from "@/lib/strapi/media"
+import type { ExperienceCategory } from "@/lib/portfolio/portfolio-data"
+import type { ProjectMedia, ProjectWithCover } from "@/types/project"
 
 type ExperienceCategoryPageProps = {
   category: ExperienceCategory
-  experiences: Experience[]
+  projects: ProjectWithCover[]
 }
 
 export function ExperienceCategoryPage({
   category,
-  experiences,
+  projects,
 }: ExperienceCategoryPageProps) {
   const Icon = category.icon
 
@@ -36,11 +39,7 @@ export function ExperienceCategoryPage({
 
       <section className="relative px-4 pb-10 sm:px-6 lg:px-8 lg:pb-12 ">
         <div className="mx-auto max-w-7xl">
-          <Button
-            asChild
-            variant="ghost"
-            className="mb-6 w-fit"
-          >
+          <Button asChild variant="ghost" className="mb-6 w-fit">
             <Link href="/">
               <ArrowLeftIcon data-icon="inline-start" />
               Retour
@@ -48,29 +47,37 @@ export function ExperienceCategoryPage({
           </Button>
 
           <div className="max-w-5xl">
-              <div className="mb-6 inline-flex items-center gap-3 rounded-full border border-foreground/10 bg-background px-4 py-2 text-sm text-muted-foreground shadow-sm">
-                <Icon aria-hidden="true" className="size-4 text-[var(--portfolio-hero-accent)]" />
-                {category.label}
-              </div>
-              <h1 className="bebas-neue-regular text-[clamp(5rem,14vw,13rem)] leading-[0.78] tracking-normal">
-                {category.title}
-              </h1>
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
-                {category.description}
-              </p>
+            <div className="mb-6 inline-flex items-center gap-3 rounded-full border border-foreground/10 bg-background px-4 py-2 text-sm text-muted-foreground shadow-sm">
+              <Icon
+                aria-hidden="true"
+                className="size-4 text-[var(--portfolio-hero-accent)]"
+              />
+              {category.label}
+            </div>
+            <h1 className="bebas-neue-regular text-[clamp(5rem,14vw,13rem)] leading-[0.78] tracking-normal">
+              {category.title}
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
+              {category.description}
+            </p>
           </div>
         </div>
       </section>
 
       <section className="relative px-4 pb-20 sm:px-6 lg:px-8 lg:pb-28">
         <div className="mx-auto grid max-w-7xl gap-8">
-          {experiences.map((experience, index) => (
-            <ProjectFeatureCard
-              key={experience.slug}
-              experience={experience}
-              isReversed={index % 2 === 1}
-            />
-          ))}
+          {projects.length > 0 ? (
+            projects.map((project, index) => (
+              <ProjectFeatureCard
+                key={project.documentId ?? project.id}
+                category={category}
+                project={project}
+                isReversed={index % 2 === 1}
+              />
+            ))
+          ) : (
+            <EmptyProjectsState />
+          )}
         </div>
       </section>
     </main>
@@ -78,13 +85,17 @@ export function ExperienceCategoryPage({
 }
 
 function ProjectFeatureCard({
-  experience,
+  category,
+  project,
   isReversed,
 }: {
-  experience: Experience
+  category: ExperienceCategory
+  project: ProjectWithCover
   isReversed: boolean
 }) {
-  const projectHref = `/experiences/${experience.categorySlug}/${experience.slug}`
+  const tools = getProjectTools(project.outils)
+  const coverUrl = getCoverUrl(project.couverture)
+  const projectHref = `/experiences/${category.slug}/${getProjectRouteTitle(project.titre)}`
 
   return (
     <article className="relative overflow-hidden rounded-[1.5rem] border border-foreground/10 bg-card shadow-[0_24px_70px_rgb(0_0_0/0.1)]">
@@ -104,13 +115,24 @@ function ProjectFeatureCard({
             </div>
 
             <div className="relative aspect-[16/10] overflow-hidden bg-muted">
-              <Image
-                src={experience.imageUrl}
-                alt={`Visuel du projet ${experience.client}`}
-                fill
-                sizes="(min-width: 1024px) 46vw, 100vw"
-                className="object-cover transition-transform duration-700 group-hover:scale-105"
-              />
+              {coverUrl ? (
+                <Image
+                  src={coverUrl}
+                  alt={
+                    project.couverture?.alternativeText ??
+                    project.couverture?.caption ??
+                    `Visuel du projet ${project.titre}`
+                  }
+                  fill
+                  sizes="(min-width: 1024px) 46vw, 100vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  unoptimized={isLocalMediaUrl(coverUrl)}
+                />
+              ) : (
+                <div className="grid h-full place-items-center px-6 text-center text-sm text-muted-foreground">
+                  Aucun visuel de couverture
+                </div>
+              )}
               <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_58%,rgb(0_0_0/0.35))]" />
             </div>
           </div>
@@ -118,35 +140,43 @@ function ProjectFeatureCard({
 
         <div className="flex min-h-[28rem] flex-col justify-between p-6 sm:p-8 lg:p-10">
           <div>
-            <div className="mb-6 flex items-center justify-between gap-5">
-              <span className="rounded-full border border-foreground/12 px-3 py-1 text-xs font-medium text-muted-foreground">
-                {experience.period}
-              </span>
-            </div>
+            {project.date ? (
+              <div className="mb-6 flex items-center justify-between gap-5">
+                <span className="rounded-full border border-foreground/12 px-3 py-1 text-xs font-medium uppercase text-muted-foreground">
+                  {formatProjectDate(project.date)}
+                </span>
+              </div>
+            ) : null}
 
-            <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground">
-              {experience.client}
-            </p>
+            {project.sous_titre ? (
+              <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground">
+                {project.sous_titre}
+              </p>
+            ) : null}
             <h2 className="bebas-neue-regular mt-3 max-w-xl text-5xl font-semibold leading-[0.9] tracking-normal text-balance sm:text-6xl">
-              {experience.title}
+              {project.titre}
             </h2>
-            <p className="mt-5 max-w-xl text-base leading-7 text-muted-foreground">
-              {experience.summary}
-            </p>
+            {project.mini_description ? (
+              <p className="mt-5 max-w-xl break-words text-base leading-7 text-muted-foreground">
+                {project.mini_description}
+              </p>
+            ) : null}
           </div>
 
           <div className="mt-10">
-            <div className="mb-7 flex flex-wrap gap-2">
-              {[...experience.tools, ...experience.apps].slice(0, 6).map((tag) => (
-                <Badge
-                  key={`${experience.slug}-${tag}`}
-                  variant="outline"
-                  className="rounded-md border-foreground/10 bg-white px-3! py-4! text-sm leading-7 text-foreground/80 shadow-sm"
-                >
-                  {tag}
-                </Badge>
-              ))}
-            </div>
+            {tools.length > 0 ? (
+              <div className="mb-7 flex flex-wrap gap-2">
+                {tools.slice(0, 8).map((tag) => (
+                  <Badge
+                    key={`${project.documentId ?? project.id}-${tag}`}
+                    variant="outline"
+                    className="rounded-md border-foreground/10 bg-white px-3! py-4! text-sm leading-7 text-foreground/80 shadow-sm"
+                  >
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            ) : null}
 
             <div className="flex flex-wrap gap-3">
               <Button asChild className="bg-[var(--portfolio-hero-accent)] text-white hover:bg-[color-mix(in_oklch,var(--portfolio-hero-accent),black_12%)]">
@@ -161,4 +191,51 @@ function ProjectFeatureCard({
       </div>
     </article>
   )
+}
+
+function EmptyProjectsState() {
+  return (
+    <div className="rounded-[1.5rem] border border-foreground/10 bg-card px-6 py-14 text-center shadow-[0_24px_70px_rgb(0_0_0/0.08)]">
+      <p className="bebas-neue-regular text-5xl leading-none tracking-normal">
+        Aucun projet pour le moment
+      </p>
+    </div>
+  )
+}
+
+function getProjectTools(tools?: string | null) {
+  return (
+    tools
+      ?.split(",")
+      .map((tool) => tool.trim())
+      .filter(Boolean) ?? []
+  )
+}
+
+function formatProjectDate(date: string) {
+  return new Intl.DateTimeFormat("fr-FR", {
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(date))
+}
+
+function getCoverUrl(media?: ProjectMedia | null) {
+  if (!media?.mime?.startsWith("image/")) {
+    return null
+  }
+
+  return getStrapiMediaUrl(
+    media.formats?.large?.url ?? media.formats?.medium?.url ?? media.url,
+  )
+}
+
+function isLocalMediaUrl(url: string) {
+  try {
+    const mediaUrl = new URL(url)
+
+    return mediaUrl.hostname === "localhost" || mediaUrl.hostname === "127.0.0.1"
+  } catch {
+    return false
+  }
 }
