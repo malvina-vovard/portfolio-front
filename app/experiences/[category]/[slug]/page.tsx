@@ -15,7 +15,6 @@ import {
 } from "@/lib/projects/get-project"
 import {
   experienceCategories,
-  featuredExperiences,
   getCategoryBySlug,
 } from "@/lib/portfolio/portfolio-data"
 import { getStrapiMediaUrl } from "@/lib/strapi/media"
@@ -49,14 +48,9 @@ export async function generateStaticParams() {
     )
   ).flat()
 
-  const fallbackParams = featuredExperiences.map((experience) => ({
-    category: experience.categorySlug,
-    slug: experience.slug,
-  }))
-
   const paramsByRoute = new Map<string, { category: string; slug: string }>()
 
-  for (const param of [...cmsParams, ...fallbackParams]) {
+  for (const param of cmsParams) {
     paramsByRoute.set(`${param.category}/${param.slug}`, param)
   }
 
@@ -146,68 +140,13 @@ function getProjectLeadImage(project: ProjectWithMedia) {
 }
 
 async function getProjectForRoute(
-  categorySlug: string,
+  _categorySlug: string,
   slug: string,
   projectCategory: NonNullable<ReturnType<typeof getProjectCategoryFromRoute>>,
 ) {
   const decodedTitle = getProjectTitleFromRoute(slug)
-  const project =
-    (await getProjectByTitleAndCategory(decodedTitle, projectCategory)) ??
-    (await getProjectByTitleAndCategory(
-      getFeaturedExperienceForRoute(categorySlug, slug)?.title ?? decodedTitle,
-      projectCategory,
-    ))
 
-  return project ?? getFallbackProjectForRoute(categorySlug, slug)
-}
-
-function getFeaturedExperienceForRoute(categorySlug: string, slug: string) {
-  const decodedTitle = getProjectTitleFromRoute(slug)
-
-  return featuredExperiences.find(
-    (experience) =>
-      experience.categorySlug === categorySlug &&
-      (experience.slug === slug ||
-        experience.title === decodedTitle ||
-        getProjectRouteTitle(experience.title) === slug),
-  )
-}
-
-function getFallbackProjectForRoute(categorySlug: string, slug: string) {
-  const experience = getFeaturedExperienceForRoute(categorySlug, slug)
-
-  if (!experience) {
-    return null
-  }
-
-  return {
-    id: -1,
-    documentId: `fallback-${experience.categorySlug}-${experience.slug}`,
-    titre: experience.title,
-    categorie: getProjectCategoryFromRoute(experience.categorySlug) ?? "marketing_digital",
-    description: experience.content.join("\n\n"),
-    mini_description: experience.summary,
-    date: experience.period,
-    outils: [...experience.tools, ...experience.apps].join(", "),
-    sous_titre: experience.client,
-    favoris: true,
-    ligne_medias: [
-      {
-        id: -1,
-        documentId: `fallback-media-${experience.slug}`,
-        medias: [
-          {
-            id: -1,
-            documentId: `fallback-image-${experience.slug}`,
-            name: `Visuel ${experience.client}`,
-            alternativeText: `Visuel du projet ${experience.client}`,
-            url: experience.imageUrl,
-            mime: "image/jpeg",
-          },
-        ],
-      },
-    ],
-  } satisfies ProjectWithMedia
+  return getProjectByTitleAndCategory(decodedTitle, projectCategory)
 }
 
 function getProjectMediaUrl(media?: ProjectMedia | null) {

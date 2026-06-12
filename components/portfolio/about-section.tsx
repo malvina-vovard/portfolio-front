@@ -21,7 +21,6 @@ import { skillBadges } from "@/lib/portfolio/portfolio-data"
 import type { AboutContent, ContactContent } from "@/types/home-content"
 
 const PROFILE_IMAGE_URL = "/images/malvina4.jpeg"
-// "https://images.unsplash.com/photo-1524504388940-b1c1722653e1"
 
 const DEFAULT_ABOUT_DESCRIPTION =
   "J'accompagne les marques dans la construction d'une presence digitale claire: une strategie qui tient debout, des pages qui convertissent, et des visuels qui restent en tete."

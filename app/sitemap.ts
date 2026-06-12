@@ -1,9 +1,6 @@
 import type { MetadataRoute } from "next"
 
-import {
-  experienceCategories,
-  featuredExperiences,
-} from "@/lib/portfolio/portfolio-data"
+import { experienceCategories } from "@/lib/portfolio/portfolio-data"
 import { getProjectCategoryFromRoute, getProjectRouteTitle } from "@/lib/projects/categories"
 import { getProjectsByCategory } from "@/lib/projects/get-project"
 import { getAbsoluteUrl } from "@/lib/seo"
@@ -56,17 +53,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     )
   ).flat()
 
-  const fallbackProjects = featuredExperiences.map((experience) => ({
-    url: getAbsoluteUrl(`/experiences/${experience.categorySlug}/${experience.slug}`),
-    lastModified: now,
-    changeFrequency: "monthly" as const,
-    priority: 0.7,
-    images: [experience.imageUrl],
-  }))
-
   const routesByUrl = new Map<string, MetadataRoute.Sitemap[number]>()
 
-  for (const route of [...staticRoutes, ...fallbackProjects, ...cmsProjects]) {
+  for (const route of [...staticRoutes, ...cmsProjects]) {
     routesByUrl.set(route.url, route)
   }
 
