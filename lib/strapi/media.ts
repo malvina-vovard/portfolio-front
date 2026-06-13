@@ -1,7 +1,4 @@
-import {
-  getRequiredPublicStrapiApiUrl,
-  getRequiredStrapiApiUrl,
-} from "@/lib/strapi/env"
+import { getRequiredStrapiApiUrl } from "@/lib/strapi/env"
 
 export function getStrapiMediaUrl(path?: string | null) {
   if (!path) {
@@ -25,12 +22,8 @@ export function getStrapiMediaUrl(path?: string | null) {
 
 function getStrapiMediaBaseUrl() {
   try {
-    return getRequiredPublicStrapiApiUrl()
+    return getRequiredStrapiApiUrl()
   } catch {
-    try {
-      return getRequiredStrapiApiUrl()
-    } catch {
-      return null
-    }
+    return null
   }
 }

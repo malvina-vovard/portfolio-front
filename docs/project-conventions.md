@@ -22,9 +22,8 @@ This frontend is a dynamic portfolio built with Next.js 16, Tailwind CSS, shadcn
 - Strapi API URLs must be configured through environment variables.
 - Do not add hardcoded fallback URLs for backend services in runtime code.
 - Use clear names:
-  - `STRAPI_API_URL` for server-side Strapi API requests.
+  - `NEXT_PUBLIC_STRAPI_API_URL` for Strapi API requests and public media URLs.
   - `STRAPI_API_TOKEN` for the private Strapi API token.
-  - `NEXT_PUBLIC_STRAPI_API_URL` only for public browser-safe needs such as media URLs.
 - Keep `.env.example` updated when a new environment variable is required.
 - Never commit secrets.
 
