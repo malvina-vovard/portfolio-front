@@ -61,6 +61,9 @@ const infoLayouts = [
   },
 ]
 
+const INFO_LAYOUT_BASE_HEIGHT = 820
+const INFO_LAYOUT_MIN_SCALE = 0.72
+
 export type HomeProject = {
   category: string
   company: string
@@ -141,6 +144,7 @@ export function ProjectsSectionStack({ projects }: ProjectsSectionStackProps) {
           scale: 1,
           scrollTrigger: {
             end: "top top",
+            invalidateOnRefresh: true,
             scrub: 0.9,
             start: "top 88%",
             trigger: section,
@@ -153,6 +157,7 @@ export function ProjectsSectionStack({ projects }: ProjectsSectionStackProps) {
           scrollTrigger: {
             anticipatePin: 1,
             end: () => `+=${window.innerHeight * (stackProjects.length * 1.8)}`,
+            invalidateOnRefresh: true,
             pin: true,
             scrub: 1.35,
             start: "top top",
@@ -173,10 +178,12 @@ export function ProjectsSectionStack({ projects }: ProjectsSectionStackProps) {
               {
                 autoAlpha: 1,
                 duration: 1.05,
-                scale: 1,
+                scale: () => getInfoLayoutScale(),
                 stagger: 0.12,
-                x: (partIndex) => layout.positions[partIndex]?.x ?? 0,
-                y: (partIndex) => layout.positions[partIndex]?.y ?? 0,
+                x: (partIndex) =>
+                  (layout.positions[partIndex]?.x ?? 0) * getInfoLayoutScale(),
+                y: (partIndex) =>
+                  (layout.positions[partIndex]?.y ?? 0) * getInfoLayoutScale(),
               },
               index === 0 ? "+=0.22" : "+=0.08",
             )
@@ -206,7 +213,7 @@ export function ProjectsSectionStack({ projects }: ProjectsSectionStackProps) {
           } else {
             timeline.to(infoGroup?.querySelectorAll("[data-info-part]") ?? [], {
               duration: 0.62,
-              scale: 1,
+              scale: () => getInfoLayoutScale(),
             })
           }
         })
@@ -221,9 +228,9 @@ export function ProjectsSectionStack({ projects }: ProjectsSectionStackProps) {
       ref={sectionRef}
       className="relative z-10 overflow-hidden rounded-b-[clamp(3rem,7vw,6.5rem)] bg-background px-4 py-16 sm:px-6 lg:px-8 lg:py-0"
     >
-      <div className="mx-auto max-w-7xl lg:grid lg:min-h-screen lg:grid-rows-[auto_1fr] lg:py-8">
+      <div className="mx-auto max-w-7xl lg:grid lg:min-h-screen lg:grid-rows-[auto_1fr] lg:py-8 lg:[@media(max-height:820px)]:py-4">
         <div className="mb-10 flex flex-col gap-5 lg:mb-0">
-          <h2 className="bebas-neue-regular text-[clamp(5rem,15vw,13rem)] leading-[0.82] tracking-normal">
+          <h2 className="bebas-neue-regular text-[clamp(5rem,15vw,13rem)] leading-[0.82] tracking-normal lg:[@media(max-height:820px)]:text-[clamp(4.2rem,11vw,8rem)]">
             Projets.
           </h2>
           <div className="flex justify-start md:justify-end">
@@ -238,7 +245,7 @@ export function ProjectsSectionStack({ projects }: ProjectsSectionStackProps) {
 
         <div className="hidden min-h-0 place-items-center lg:grid">
           {stackProjects.length > 0 ? (
-            <div className="project-stack-frame relative grid h-[34rem] w-full max-w-5xl place-items-center">
+            <div className="project-stack-frame relative grid h-[min(34rem,calc(100vh-13rem))] min-h-[26rem] w-full max-w-5xl place-items-center">
               <ProjectStack projects={stackProjects} />
               {stackProjects.map((project, index) => (
                 <ProjectInfo key={project.id} project={project} index={index} />
@@ -265,7 +272,7 @@ export function ProjectsSectionStack({ projects }: ProjectsSectionStackProps) {
 
 function ProjectStack({ projects }: ProjectStackProps) {
   return (
-    <div className="relative aspect-[4/5] w-[min(34vw,25rem)]">
+    <div className="relative aspect-[4/5] w-[min(34vw,25rem,calc((100vh-18rem)*0.8))] min-w-[17rem]">
       {projects.map((project, index) => (
         <ProjectCard key={project.id} project={project} index={index} total={projects.length} />
       ))}
@@ -435,4 +442,12 @@ function isLocalMediaUrl(url: string) {
   } catch {
     return false
   }
+}
+
+function getInfoLayoutScale() {
+  return gsap.utils.clamp(
+    INFO_LAYOUT_MIN_SCALE,
+    1,
+    window.innerHeight / INFO_LAYOUT_BASE_HEIGHT,
+  )
 }
