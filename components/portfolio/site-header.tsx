@@ -28,7 +28,6 @@ const isNavItemActive = (href: string, pathname: string) => {
 
 export function SiteHeader() {
   const pathname = usePathname()
-  const [clientPathname, setClientPathname] = useState(pathname)
   const navRef = useRef<HTMLDivElement>(null)
   const linkRefs = useRef<(HTMLAnchorElement | null)[]>([])
   const lastScrollYRef = useRef(0)
@@ -36,7 +35,7 @@ export function SiteHeader() {
   const [pendingHref, setPendingHref] = useState<string | null>(null)
   const [activePill, setActivePill] = useState({ left: 0, width: 0, ready: false })
   const [isHeaderHidden, setIsHeaderHidden] = useState(false)
-  const activePathname = clientPathname || pathname || "/"
+  const activePathname = pathname || "/"
 
   const currentActiveIndex = portfolioNavigation.findIndex((item) =>
     isNavItemActive(item.href, activePathname)
@@ -45,10 +44,6 @@ export function SiteHeader() {
     ? portfolioNavigation.findIndex((item) => item.href === pendingHref)
     : -1
   const activeIndex = pendingActiveIndex >= 0 ? pendingActiveIndex : currentActiveIndex
-
-  useLayoutEffect(() => {
-    setClientPathname(window.location.pathname || pathname || "/")
-  }, [pathname])
 
   useEffect(() => {
     if (!pendingHref) {
@@ -177,7 +172,7 @@ export function SiteHeader() {
                   data-active={isActive}
                   className={cn(
                     "relative z-10 flex h-10 items-center rounded-full px-4 text-sm font-medium text-foreground/72 transition-colors duration-300 hover:text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-foreground/20",
-                    "data-[active=true]:text-white data-[active=true]:hover:text-white"
+                    isActive && "text-white hover:text-white"
                   )}
                 >
                   {item.label}
