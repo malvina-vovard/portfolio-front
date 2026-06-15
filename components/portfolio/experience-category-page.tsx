@@ -157,7 +157,7 @@ function ProjectFeatureCard({
               {project.titre}
             </h2>
             {project.mini_description ? (
-              <p className="mt-5 max-w-xl overflow-hidden text-base leading-7 text-muted-foreground [display:-webkit-box] [overflow-wrap:anywhere] [-webkit-box-orient:vertical] [-webkit-line-clamp:6] sm:[-webkit-line-clamp:8]">
+              <p className="mt-5 max-w-xl overflow-hidden whitespace-pre-line text-base leading-7 text-muted-foreground [display:-webkit-box] [overflow-wrap:anywhere] [-webkit-box-orient:vertical] [-webkit-line-clamp:6] sm:[-webkit-line-clamp:8]">
                 {project.mini_description}
               </p>
             ) : null}

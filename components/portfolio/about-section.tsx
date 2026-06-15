@@ -169,6 +169,7 @@ export function AboutSection({ about, contact }: AboutSectionProps) {
                 alt={about.avatarAlt ?? "Portrait editorial de Malvina"}
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
+                quality={92}
                 className="about-portrait-image scale-110 object-cover will-change-transform"
                 unoptimized={isLocalMediaUrl(avatarUrl)}
               />
@@ -210,7 +211,7 @@ export function AboutSection({ about, contact }: AboutSectionProps) {
           onMouseLeave={(event) => animateSurface(event, false)}
         >
           <CardContent className="flex flex-col gap-8 ">
-            <p className="about-description font-medium max-w-3xl text-white/95 leading-6">
+            <p className="about-description font-medium max-w-3xl whitespace-pre-line text-white/95 leading-6">
               {about.description ?? DEFAULT_ABOUT_DESCRIPTION}
             </p>
             <div className="about-divider h-[1px] w-full bg-white/10"></div>
@@ -219,7 +220,7 @@ export function AboutSection({ about, contact }: AboutSectionProps) {
                 <Badge
                   key={skill}
                   variant="default"
-                  className="text-sm bg-white/5 py-4! px-3! rounded-md text-white/95"
+                  className="rounded-md border border-white/22 bg-white/14 px-3! py-4! text-sm text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.14)]"
                 >
                   {skill}
                 </Badge>

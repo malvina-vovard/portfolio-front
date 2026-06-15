@@ -44,7 +44,7 @@ export function ContactSection({ contact }: ContactSectionProps) {
       <div className="mx-auto flex max-w-7xl flex-col justify-between">
         <div className="max-w-6xl">
           <p className="mb-6 text-sm uppercase tracking-[0.28em] text-white md:text-white/45">Contact</p>
-          <h2 className="bebas-neue-regular relative text-[clamp(5.5rem,18vw,18rem)] leading-[0.78] tracking-normal text-white/80 md:text-white/10">
+          <h2 className="bebas-neue-regular relative text-[clamp(5.5rem,18vw,18rem)] leading-[0.78] tracking-normal text-white/85 md:text-white/24">
             {/* <span
               aria-hidden="true"
               className="absolute left-[0.035em] top-[0.035em] text-transparent [-webkit-text-stroke:1px_var(--portfolio-hero-accent)]"
