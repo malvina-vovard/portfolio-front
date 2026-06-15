@@ -2,10 +2,43 @@ import type { StrapiEntity } from "@/lib/strapi/types"
 
 export type ProjectCategory = "marketing_digital" | "design" | "website"
 
+export type RichTextTextNode = {
+  type: "text"
+  text: string
+  bold?: boolean
+  italic?: boolean
+  underline?: boolean
+  strikethrough?: boolean
+  code?: boolean
+}
+
+export type RichTextLinkNode = {
+  type: "link"
+  url: string
+  children: RichTextInlineNode[]
+  rel?: string | null
+  target?: string | null
+}
+
+export type RichTextInlineNode = RichTextTextNode | RichTextLinkNode
+
+export type RichTextBlockNode = {
+  type: string
+  children?: RichTextNode[]
+  format?: "ordered" | "unordered" | string
+  level?: number
+  url?: string
+  image?: ProjectMedia | null
+  [key: string]: unknown
+}
+
+export type RichTextNode = RichTextInlineNode | RichTextBlockNode
+export type RichTextContent = RichTextBlockNode[]
+
 export type Project = {
   titre: string
   categorie: ProjectCategory
-  description?: string | null
+  description?: RichTextContent | string | null
   mini_description?: string | null
   date?: string | null
   outils?: string | null

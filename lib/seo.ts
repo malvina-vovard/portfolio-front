@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 
 import type { ExperienceCategory } from "@/lib/portfolio/portfolio-data"
+import { richTextToPlainText } from "@/lib/strapi/rich-text"
 import type { ProjectWithCover, ProjectWithMedia } from "@/types/project"
 
 export const siteName = "Portfolio Malvina"
@@ -124,8 +125,7 @@ export function getProjectMetadata({
   image?: string | null
 }) {
   const description =
-    project.mini_description ??
-    project.description ??
+    (project.mini_description ?? richTextToPlainText(project.description)) ||
     `Projet ${project.titre} par Malvina en ${category.label.toLowerCase()}.`
 
   return getRouteMetadata({

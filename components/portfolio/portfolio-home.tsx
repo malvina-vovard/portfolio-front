@@ -11,6 +11,7 @@ import {
   getProjectRouteTitle,
 } from "@/lib/projects/categories"
 import { getStrapiMediaUrl } from "@/lib/strapi/media"
+import { richTextToPlainText } from "@/lib/strapi/rich-text"
 import type { AboutContent, ContactContent } from "@/types/home-content"
 import type { ProfessionalExperience } from "@/types/professional-experience"
 import type { ProjectMedia, ProjectWithCover } from "@/types/project"
@@ -59,7 +60,7 @@ function mapHomeProject(project: ProjectWithCover): HomeProject {
       `Visuel du projet ${project.titre}`,
     imageUrl: coverUrl,
     period: project.date ? formatProjectDate(project.date) : null,
-    summary: project.mini_description ?? project.description ?? "",
+    summary: project.mini_description ?? richTextToPlainText(project.description),
     title: project.titre,
     tools,
   }

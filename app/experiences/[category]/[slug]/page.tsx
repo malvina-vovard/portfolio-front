@@ -18,6 +18,7 @@ import {
   getCategoryBySlug,
 } from "@/lib/portfolio/portfolio-data"
 import { getStrapiMediaUrl } from "@/lib/strapi/media"
+import { richTextToPlainText } from "@/lib/strapi/rich-text"
 import { getJsonLd, getProjectMetadata } from "@/lib/seo"
 import type { ProjectMedia, ProjectWithMedia } from "@/types/project"
 
@@ -108,8 +109,7 @@ export default async function ExperienceDetailRoute({
     "@type": "CreativeWork",
     name: project.titre,
     description:
-      project.description ??
-      project.mini_description ??
+      (project.mini_description ?? richTextToPlainText(project.description)) ||
       `Projet ${project.titre} par Malvina`,
     creator: {
       "@type": "Person",

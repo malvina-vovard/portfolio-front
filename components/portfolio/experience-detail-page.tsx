@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { ArrowLeftIcon } from "lucide-react"
 
+import { RichTextRenderer } from "@/components/portfolio/rich-text-renderer"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { getStrapiMediaUrl } from "@/lib/strapi/media"
@@ -54,11 +55,7 @@ export function ExperienceDetailPage({
             </p>
           ) : null}
 
-          {project.description ? (
-            <p className="max-w-full break-words text-base leading-8 text-foreground/82">
-              {project.description}
-            </p>
-          ) : null}
+          <RichTextRenderer content={project.description} />
 
           {tools.length > 0 ? (
             <div className="flex flex-col gap-2 pt-1">
