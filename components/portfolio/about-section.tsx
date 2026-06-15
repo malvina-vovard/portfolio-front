@@ -220,7 +220,7 @@ export function AboutSection({ about, contact }: AboutSectionProps) {
                 <Badge
                   key={skill}
                   variant="default"
-                  className="text-sm bg-white/5 py-4! px-3! rounded-md text-white/95"
+                  className="rounded-md border border-white/22 bg-white/14 px-3! py-4! text-sm text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.14)]"
                 >
                   {skill}
                 </Badge>

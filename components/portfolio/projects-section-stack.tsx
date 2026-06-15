@@ -362,7 +362,7 @@ function ToolBadge({ tool }: ToolBadgeProps) {
   return (
     <Badge
       variant="default"
-      className="rounded-md bg-white/5 px-3! py-4! text-sm leading-7 text-white/95"
+      className="rounded-md border border-white/22 bg-white/14 px-3! py-4! text-sm leading-7 text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.14)]"
     >
       {tool}
     </Badge>
