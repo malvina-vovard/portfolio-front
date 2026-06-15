@@ -8,6 +8,8 @@ import type {
   ProjectWithMedia,
 } from "@/types/project"
 
+const PROJECTS_NEWEST_FIRST_SORT = ["date:desc", "publishedAt:desc"]
+
 export async function getFavoriteProjects() {
   try {
     const response = await strapiFetch<StrapiCollectionResponse<ProjectWithCover>>(
@@ -46,6 +48,7 @@ export async function getAllProjects() {
       "/projets",
       {
         query: {
+          sort: PROJECTS_NEWEST_FIRST_SORT,
           populate: {
             couverture: true,
           },
@@ -73,6 +76,7 @@ export async function getProjectsByCategory(category: ProjectCategory) {
       "/projets",
       {
         query: {
+          sort: PROJECTS_NEWEST_FIRST_SORT,
           filters: {
             categorie: {
               $eq: category,
