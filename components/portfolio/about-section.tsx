@@ -169,6 +169,7 @@ export function AboutSection({ about, contact }: AboutSectionProps) {
                 alt={about.avatarAlt ?? "Portrait editorial de Malvina"}
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
+                quality={92}
                 className="about-portrait-image scale-110 object-cover will-change-transform"
                 unoptimized={isLocalMediaUrl(avatarUrl)}
               />

@@ -28,7 +28,7 @@ function mapAboutContent(
 ): AboutContent {
   const avatar = attributes?.avatar
   const avatarPath =
-    avatar?.formats?.large?.url ?? avatar?.formats?.medium?.url ?? avatar?.url
+    avatar?.url ?? avatar?.formats?.large?.url ?? avatar?.formats?.medium?.url
 
   return {
     title: attributes?.titre ?? null,
