@@ -55,7 +55,7 @@ export function ExperienceDetailPage({
           ) : null}
 
           {project.description ? (
-            <p className="max-w-full break-words text-base leading-8 text-foreground/82">
+            <p className="max-w-full whitespace-pre-line break-words text-base leading-8 text-foreground/82">
               {project.description}
             </p>
           ) : null}

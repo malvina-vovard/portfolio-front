@@ -210,7 +210,7 @@ export function AboutSection({ about, contact }: AboutSectionProps) {
           onMouseLeave={(event) => animateSurface(event, false)}
         >
           <CardContent className="flex flex-col gap-8 ">
-            <p className="about-description font-medium max-w-3xl text-white/95 leading-6">
+            <p className="about-description font-medium max-w-3xl whitespace-pre-line text-white/95 leading-6">
               {about.description ?? DEFAULT_ABOUT_DESCRIPTION}
             </p>
             <div className="about-divider h-[1px] w-full bg-white/10"></div>

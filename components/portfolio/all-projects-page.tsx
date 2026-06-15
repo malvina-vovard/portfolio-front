@@ -167,7 +167,7 @@ function AllProjectCard({
           {project.titre}
         </h3>
         {project.mini_description ? (
-          <p className="mt-4 text-sm leading-6 text-muted-foreground">
+          <p className="mt-4 whitespace-pre-line text-sm leading-6 text-muted-foreground">
             {project.mini_description}
           </p>
         ) : null}

@@ -332,7 +332,7 @@ function ProjectInfo({ project, index }: ProjectInfoProps) {
         data-info-part
         className={`absolute left-0 top-0 w-80 origin-center -translate-x-1/2 -translate-y-1/2 ${layout.rotations[1]} rounded-[1rem] border border-foreground/12 bg-background px-5 py-4 shadow-[0_18px_45px_rgb(0_0_0/0.1)] will-change-transform`}
       >
-        <p className="max-w-full text-base leading-7 [overflow-wrap:anywhere]">
+        <p className="max-w-full whitespace-pre-line text-base leading-7 [overflow-wrap:anywhere]">
           {project.summary}
         </p>
         <Button
@@ -393,7 +393,7 @@ function MobileProjectCard({ project, index }: ProjectInfoProps) {
           {String(index + 1).padStart(2, "0")} / {project.company}
         </p>
         <h3 className="font-heading text-4xl font-semibold tracking-normal">{project.title}</h3>
-        <p className="max-w-full text-base leading-7 text-muted-foreground [overflow-wrap:anywhere]">
+        <p className="max-w-full whitespace-pre-line text-base leading-7 text-muted-foreground [overflow-wrap:anywhere]">
           {project.summary}
         </p>
         {project.tools.length > 0 ? (
