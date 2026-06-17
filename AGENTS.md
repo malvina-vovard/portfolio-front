@@ -13,3 +13,5 @@ The `docs/` folder contains project documentation that should be read before cha
 Current docs:
 - `docs/project-conventions.md`: coding, naming, environment variables, file organization, and Strapi helper conventions.
 - `docs/portfolio-architecture.md`: portfolio routes, data modules, and Strapi app configuration contract.
+
+When completing a fix or feature, always provide a concise commit title and commit description.

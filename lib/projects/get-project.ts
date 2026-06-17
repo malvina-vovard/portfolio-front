@@ -16,6 +16,7 @@ export async function getFavoriteProjects() {
       "/projets",
       {
         query: {
+          sort: PROJECTS_NEWEST_FIRST_SORT,
           filters: {
             favoris: {
               $eq: true,
