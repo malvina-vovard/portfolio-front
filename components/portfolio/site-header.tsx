@@ -36,17 +36,26 @@ const isNavItemActive = (href: string, pathname: string) => {
 
 export function SiteHeader() {
   const pathname = usePathname()
+  const [clientPathname, setClientPathname] = useState<string | null>(null)
   const navRef = useRef<HTMLDivElement>(null)
   const linkRefs = useRef<(HTMLAnchorElement | null)[]>([])
   const lastScrollYRef = useRef(0)
   const scrollDeltaRef = useRef(0)
   const [activePill, setActivePill] = useState({ left: 0, width: 0, ready: false })
   const [isHeaderHidden, setIsHeaderHidden] = useState(false)
-  const activePathname = normalizePathname(pathname)
+  const activePathname = clientPathname ? normalizePathname(clientPathname) : null
 
-  const activeIndex = portfolioNavigation.findIndex((item) =>
-    isNavItemActive(item.href, activePathname)
-  )
+  const activeIndex = activePathname
+    ? portfolioNavigation.findIndex((item) => isNavItemActive(item.href, activePathname))
+    : -1
+
+  useEffect(() => {
+    const frameId = window.requestAnimationFrame(() => {
+      setClientPathname(pathname)
+    })
+
+    return () => window.cancelAnimationFrame(frameId)
+  }, [pathname])
 
   useLayoutEffect(() => {
     const updateActivePill = () => {
@@ -199,7 +208,9 @@ export function SiteHeader() {
             </DrawerHeader>
             <nav aria-label="Navigation mobile" className="flex flex-col gap-2 px-4 py-6">
               {portfolioNavigation.map((item) => {
-                const isActive = isNavItemActive(item.href, activePathname)
+                const isActive = activePathname
+                  ? isNavItemActive(item.href, activePathname)
+                  : false
 
                 return (
                   <DrawerClose key={item.href} asChild>

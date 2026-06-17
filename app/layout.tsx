@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Bebas_Neue, Geist, Geist_Mono, Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
 import { SiteHeader } from "@/components/portfolio/site-header";
 import {
@@ -152,7 +153,9 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: getJsonLd(personJsonLd) }}
         />
-        <SiteHeader />
+        <Suspense fallback={null}>
+          <SiteHeader />
+        </Suspense>
         
         {children}
       </body>
