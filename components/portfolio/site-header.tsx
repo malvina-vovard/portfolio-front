@@ -18,6 +18,14 @@ import {
 import { portfolioNavigation } from "@/lib/portfolio/portfolio-data"
 import { cn } from "@/lib/utils"
 
+const normalizePathname = (pathname: string | null) => {
+  if (!pathname || pathname === "/") {
+    return "/"
+  }
+
+  return pathname.replace(/\/+$/, "")
+}
+
 const isNavItemActive = (href: string, pathname: string) => {
   if (href === "/") {
     return pathname === "/"
@@ -32,30 +40,13 @@ export function SiteHeader() {
   const linkRefs = useRef<(HTMLAnchorElement | null)[]>([])
   const lastScrollYRef = useRef(0)
   const scrollDeltaRef = useRef(0)
-  const [pendingHref, setPendingHref] = useState<string | null>(null)
   const [activePill, setActivePill] = useState({ left: 0, width: 0, ready: false })
   const [isHeaderHidden, setIsHeaderHidden] = useState(false)
-  const activePathname = pathname || "/"
+  const activePathname = normalizePathname(pathname)
 
-  const currentActiveIndex = portfolioNavigation.findIndex((item) =>
+  const activeIndex = portfolioNavigation.findIndex((item) =>
     isNavItemActive(item.href, activePathname)
   )
-  const pendingActiveIndex = pendingHref
-    ? portfolioNavigation.findIndex((item) => item.href === pendingHref)
-    : -1
-  const activeIndex = pendingActiveIndex >= 0 ? pendingActiveIndex : currentActiveIndex
-
-  useEffect(() => {
-    if (!pendingHref) {
-      return
-    }
-
-    if (isNavItemActive(pendingHref, activePathname)) {
-      const timeoutId = window.setTimeout(() => setPendingHref(null), 0)
-
-      return () => window.clearTimeout(timeoutId)
-    }
-  }, [activePathname, pendingHref])
 
   useLayoutEffect(() => {
     const updateActivePill = () => {
@@ -77,10 +68,15 @@ export function SiteHeader() {
       })
     }
 
-    window.requestAnimationFrame(updateActivePill)
+    updateActivePill()
+
+    const frameId = window.requestAnimationFrame(updateActivePill)
     window.addEventListener("resize", updateActivePill)
 
-    return () => window.removeEventListener("resize", updateActivePill)
+    return () => {
+      window.cancelAnimationFrame(frameId)
+      window.removeEventListener("resize", updateActivePill)
+    }
   }, [activeIndex])
 
   useEffect(() => {
@@ -167,7 +163,6 @@ export function SiteHeader() {
                     linkRefs.current[index] = node
                   }}
                   href={item.href}
-                  onClick={() => setPendingHref(item.href)}
                   aria-current={isActive ? "page" : undefined}
                   data-active={isActive}
                   className={cn(
@@ -210,7 +205,6 @@ export function SiteHeader() {
                   <DrawerClose key={item.href} asChild>
                     <Link
                       href={item.href}
-                      onClick={() => setPendingHref(item.href)}
                       aria-current={isActive ? "page" : undefined}
                       data-active={isActive}
                       className={cn(
