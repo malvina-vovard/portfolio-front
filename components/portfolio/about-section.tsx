@@ -7,8 +7,8 @@ import { ExternalLinkIcon, MailIcon } from "lucide-react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 
+import { AboutGradientBubbles } from "@/components/portfolio/about-gradient-bubbles"
 import { Badge } from "@/components/ui/badge"
-import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -55,10 +55,8 @@ export function AboutSection({ about, contact }: AboutSectionProps) {
       media.add("(prefers-reduced-motion: reduce)", () => {
         gsap.set(
           [
-            ".about-gradient",
             ".about-watermark",
             ".about-card",
-            ".about-portrait-image",
             ".about-description",
             ".about-divider",
           ],
@@ -91,29 +89,6 @@ export function AboutSection({ about, contact }: AboutSectionProps) {
           )
           .from(".about-description", { autoAlpha: 0, y: 24 }, 0.48)
           .from(".about-divider", { scaleX: 0, transformOrigin: "left center" }, 0.62)
-
-        gsap.to(".about-gradient", {
-          ease: "none",
-          scale: 1.12,
-          yPercent: -4,
-          scrollTrigger: {
-            end: "bottom top",
-            scrub: true,
-            start: "top bottom",
-            trigger: section,
-          },
-        })
-
-        gsap.to(".about-portrait-image", {
-          ease: "none",
-          yPercent: -9,
-          scrollTrigger: {
-            end: "bottom top",
-            scrub: true,
-            start: "top bottom",
-            trigger: section,
-          },
-        })
       })
     }, section)
 
@@ -126,19 +101,15 @@ export function AboutSection({ about, contact }: AboutSectionProps) {
       id="a-propos"
       className="relative w-full overflow-hidden bg-[#35373a] px-4 py-14 mt-5 sm:px-6 lg:px-8"
     >
-      <BackgroundGradientAnimation
-        interactive={false}
-        gradientBackgroundStart="#000000"
-        gradientBackgroundEnd="#050505"
+      <AboutGradientBubbles
+        backgroundStart="#000000"
+        backgroundEnd="#050505"
         firstColor="var(--portfolio-hero-accent-rgb)"
         secondColor="var(--portfolio-hero-accent-rgb)"
         thirdColor="137, 147, 158"
         fourthColor="80, 80, 80"
         fifthColor="var(--portfolio-hero-accent-rgb)"
-        pointerColor="137, 147, 158"
-        size="50%"
-        blendingValue="screen"
-        containerClassName="about-gradient absolute inset-0 h-full w-full opacity-80 will-change-transform"
+        className="about-gradient"
       />
       <h1 className="about-watermark z-30 absolute bottom-0 right-5 bebas-neue-regular max-w-6xl text-[clamp(4.4rem,14.6vw,13.5rem)] leading-[0.82] tracking-normal text-white/30 will-change-transform">
         A propos.
@@ -155,7 +126,7 @@ export function AboutSection({ about, contact }: AboutSectionProps) {
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
                 quality={92}
-                className="about-portrait-image scale-110 object-cover will-change-transform"
+                className="scale-110 object-cover"
                 unoptimized={isLocalMediaUrl(avatarUrl)}
               />
             </div>
