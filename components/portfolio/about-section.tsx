@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, type MouseEvent } from "react"
+import { useEffect, useRef } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { ExternalLinkIcon, MailIcon } from "lucide-react"
@@ -120,20 +120,6 @@ export function AboutSection({ about, contact }: AboutSectionProps) {
     return () => context.revert()
   }, [])
 
-  const animateSurface = (event: MouseEvent<HTMLElement>, isEntering: boolean) => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      return
-    }
-
-    gsap.to(event.currentTarget, {
-      duration: 0.45,
-      ease: "power3.out",
-      filter: isEntering ? "drop-shadow(0 22px 28px rgb(0 0 0 / 0.24))" : "none",
-      force3D: false,
-      y: isEntering ? -6 : 0,
-    })
-  }
-
   return (
     <section
       ref={sectionRef}
@@ -151,6 +137,7 @@ export function AboutSection({ about, contact }: AboutSectionProps) {
         fifthColor="var(--portfolio-hero-accent-rgb)"
         pointerColor="137, 147, 158"
         size="50%"
+        blendingValue="screen"
         containerClassName="about-gradient absolute inset-0 h-full w-full opacity-80 will-change-transform"
       />
       <h1 className="about-watermark z-30 absolute bottom-0 right-5 bebas-neue-regular max-w-6xl text-[clamp(4.4rem,14.6vw,13.5rem)] leading-[0.82] tracking-normal text-white/30 will-change-transform">
@@ -158,9 +145,7 @@ export function AboutSection({ about, contact }: AboutSectionProps) {
       </h1>
       <div className="relative mx-auto grid max-w-7xl gap-12 lg:grid-cols-5">
         <Card
-          className="about-card min-h-[32rem] rounded-[2rem] border border-white/12 bg-[rgb(0_0_0/0.5)] text-white shadow-2xl shadow-black/30 ring-1 ring-white/15 backdrop-blur-xl will-change-transform lg:col-span-2"
-          onMouseEnter={(event) => animateSurface(event, true)}
-          onMouseLeave={(event) => animateSurface(event, false)}
+          className="about-card min-h-[32rem] rounded-[2rem] border border-white/12 bg-[rgb(0_0_0/0.5)] text-white shadow-2xl shadow-black/30 ring-1 ring-white/15 backdrop-blur-xl lg:col-span-2"
         >
           <CardContent>
             <div className="relative min-h-96 overflow-hidden rounded-[1.4rem]">
@@ -206,9 +191,7 @@ export function AboutSection({ about, contact }: AboutSectionProps) {
         </Card>
 
         <Card
-          className="about-card rounded-[2rem] border border-white/12 bg-[rgb(0_0_0/0.5)] text-white shadow-2xl shadow-black/30 ring-1 ring-white/15 backdrop-blur-xl will-change-transform lg:col-span-3"
-          onMouseEnter={(event) => animateSurface(event, true)}
-          onMouseLeave={(event) => animateSurface(event, false)}
+          className="about-card rounded-[2rem] border border-white/12 bg-[rgb(0_0_0/0.5)] text-white shadow-2xl shadow-black/30 ring-1 ring-white/15 backdrop-blur-xl lg:col-span-3"
         >
           <CardContent className="flex flex-col gap-8 ">
             <p className="about-description font-medium max-w-3xl whitespace-pre-line text-white/95 leading-6">
