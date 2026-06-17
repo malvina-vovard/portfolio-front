@@ -346,7 +346,7 @@ function ProjectInfo({ project, index }: ProjectInfoProps) {
           asChild
           className="pointer-events-auto mt-5 w-fit bg-[var(--portfolio-hero-accent)] text-white hover:bg-[color-mix(in_oklch,var(--portfolio-hero-accent),black_12%)]"
         >
-          <Link href={project.href}>
+          <Link href={project.href} prefetch={false}>
             Voir le projet
             <ArrowUpRightIcon data-icon="inline-end" />
           </Link>
@@ -411,7 +411,7 @@ function MobileProjectCard({ project, index }: ProjectInfoProps) {
           </div>
         ) : null}
         <Button asChild className="w-fit bg-[var(--portfolio-hero-accent)] text-white hover:bg-[color-mix(in_oklch,var(--portfolio-hero-accent),black_12%)]">
-          <Link href={project.href}>
+          <Link href={project.href} prefetch={false}>
             Voir le projet
             <ArrowUpRightIcon data-icon="inline-end" />
           </Link>

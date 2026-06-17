@@ -128,6 +128,7 @@ function AllProjectCard({
     <article className="group flex min-h-full flex-col overflow-hidden rounded-[1.5rem] border border-foreground/10 bg-card shadow-[0_18px_55px_rgb(0_0_0/0.08)] transition-transform duration-300 hover:-translate-y-1">
       <Link
         href={projectHref}
+        prefetch={false}
         className="block p-3"
       >
         <div className="relative aspect-[16/11] overflow-hidden rounded-[1rem] bg-muted">
@@ -188,7 +189,7 @@ function AllProjectCard({
 
         <div className="mt-auto flex justify-end pt-8">
           <Button asChild variant="outline" className="w-fit">
-            <Link href={projectHref}>
+            <Link href={projectHref} prefetch={false}>
               Voir le projet
               <ArrowRightIcon data-icon="inline-end" />
             </Link>

@@ -105,7 +105,11 @@ function ProjectFeatureCard({
           isReversed ? "lg:[&>*:first-child]:order-2" : "",
         ].join(" ")}
       >
-        <Link href={projectHref} className="group block min-w-0 p-4 sm:p-6">
+        <Link
+          href={projectHref}
+          prefetch={false}
+          className="group block min-w-0 p-4 sm:p-6"
+        >
           <div className="overflow-hidden rounded-[1rem] border border-foreground/10 bg-background shadow-[0_18px_55px_rgb(0_0_0/0.12)]">
             <div className="flex h-10 items-center gap-2 border-b border-foreground/10 bg-muted px-4">
               <span className="size-2.5 rounded-full bg-[#ff5f57]" />
@@ -180,7 +184,7 @@ function ProjectFeatureCard({
 
             <div className="flex flex-wrap gap-3">
               <Button asChild className="bg-[var(--portfolio-hero-accent)] text-white hover:bg-[color-mix(in_oklch,var(--portfolio-hero-accent),black_12%)]">
-                <Link href={projectHref}>
+                <Link href={projectHref} prefetch={false}>
                   Voir le projet
                   <ArrowRightIcon data-icon="inline-end" />
                 </Link>
