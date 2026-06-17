@@ -39,5 +39,5 @@ export function getProjectRouteTitle(title: string) {
 }
 
 export function getProjectTitleFromRoute(slug: string) {
-  return decodeURIComponent(slug).replaceAll("-", " ")
+  return decodeURIComponent(slug).normalize("NFC")
 }

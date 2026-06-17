@@ -132,7 +132,6 @@ export async function getProjectByTitleAndCategory(
         },
       },
     )
-
     return response.data[0] ?? null
   } catch (error) {
     if (isStrapiRequestError(error)) {

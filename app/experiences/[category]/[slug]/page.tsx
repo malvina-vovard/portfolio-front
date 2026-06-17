@@ -4,22 +4,22 @@ import { ExperienceDetailPage } from "@/components/portfolio/experience-detail-p
 import { getAppConfiguration } from "@/lib/app-configuration/get-app-configuration"
 import { getPortfolioThemeStyle } from "@/lib/app-configuration/theme-style"
 import {
+  experienceCategories,
+  getCategoryBySlug
+} from "@/lib/portfolio/portfolio-data"
+import {
   getDisplayCategorySlugFromRoute,
   getProjectCategoryFromRoute,
   getProjectRouteTitle,
-  getProjectTitleFromRoute,
+  getProjectTitleFromRoute
 } from "@/lib/projects/categories"
 import {
   getProjectByTitleAndCategory,
-  getProjectsByCategory,
+  getProjectsByCategory
 } from "@/lib/projects/get-project"
-import {
-  experienceCategories,
-  getCategoryBySlug,
-} from "@/lib/portfolio/portfolio-data"
+import { getJsonLd, getProjectMetadata } from "@/lib/seo"
 import { getStrapiMediaUrl } from "@/lib/strapi/media"
 import { richTextToPlainText } from "@/lib/strapi/rich-text"
-import { getJsonLd, getProjectMetadata } from "@/lib/seo"
 import type { ProjectMedia, ProjectWithMedia } from "@/types/project"
 
 type ExperienceDetailRouteProps = {
@@ -97,7 +97,6 @@ export default async function ExperienceDetailRoute({
   }
 
   const project = await getProjectForRoute(category.slug, slug, projectCategory)
-
 
   if (!project) {
     notFound()
