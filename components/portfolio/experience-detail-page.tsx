@@ -61,6 +61,12 @@ export function ExperienceDetailPage({
                 </>
               )}
 
+            {project.sous_titre && mediaRows.length > 0 && (
+                  <p className="text-base text-muted-foreground sm:text-lg">
+                    -
+                  </p>
+              )}
+
             {mediaRows.length > 0 && (
                   <a href="#project-medias-section" className="text-base uppercase tracking-[0.2em] text-[var(--portfolio-hero-accent)] sm:text-lg no-underline hover:underline">
                     Voir les photos
