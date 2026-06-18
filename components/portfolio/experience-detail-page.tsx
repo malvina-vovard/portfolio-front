@@ -49,7 +49,7 @@ export function ExperienceDetailPage({
             {project.titre}
           </h1>
 
-          <div class="flex flex-row gap-2">
+          <div className="flex flex-row gap-2">
               {project.sous_titre && (
                   <p className="text-base uppercase tracking-[0.2em] text-muted-foreground sm:text-lg">
                     {project.sous_titre}
