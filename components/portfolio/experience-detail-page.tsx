@@ -49,11 +49,26 @@ export function ExperienceDetailPage({
             {project.titre}
           </h1>
 
-          {project.sous_titre ? (
-            <p className="text-base uppercase tracking-[0.2em] text-muted-foreground sm:text-lg">
-              {project.sous_titre}
-            </p>
-          ) : null}
+          <div class="flex flex-row gap-2">
+              {project.sous_titre && (
+                <>
+                  <p className="text-base uppercase tracking-[0.2em] text-muted-foreground sm:text-lg">
+                    {project.sous_titre}
+                  </p>
+                  <p className="text-base text-muted-foreground sm:text-lg">
+                    -
+                  </p>
+                </>
+              )}
+
+            {mediaRows.length > 0 && (
+                  <a href="#project-medias-section" className="text-base uppercase tracking-[0.2em] text-[var(--portfolio-hero-accent)] sm:text-lg no-underline hover:underline">
+                    Voir les photos
+                  </p>
+              )}
+          </div>
+          
+        
 
           <RichTextRenderer content={project.description} />
 
@@ -78,7 +93,7 @@ export function ExperienceDetailPage({
         </header>
 
         {mediaRows.length > 0 ? (
-          <section className="flex flex-col gap-5">
+          <section id="project-medias-section" className="flex flex-col gap-5">
             {mediaRows.map((row, index) => (
               <ProjectMediaRow
                 key={row.documentId ?? row.id}
