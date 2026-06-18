@@ -51,27 +51,25 @@ export function ExperienceDetailPage({
 
           <div class="flex flex-row gap-2">
               {project.sous_titre && (
-                <>
                   <p className="text-base uppercase tracking-[0.2em] text-muted-foreground sm:text-lg">
                     {project.sous_titre}
                   </p>
                   <p className="text-base text-muted-foreground sm:text-lg">
                     -
                   </p>
-                </>
               )}
 
             {project.sous_titre && mediaRows.length > 0 && (
                   <p className="text-base text-muted-foreground sm:text-lg">
                     -
                   </p>
-              )}
+            )}
 
             {mediaRows.length > 0 && (
                   <a href="#project-medias-section" className="text-base uppercase tracking-[0.2em] text-[var(--portfolio-hero-accent)] sm:text-lg no-underline hover:underline">
                     Voir les photos
-                  </p>
-              )}
+                  </a>
+            )}
           </div>
           
         
