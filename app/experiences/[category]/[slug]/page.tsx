@@ -92,13 +92,21 @@ export default async function ExperienceDetailRoute({
   const category = getDisplayCategoryFromRoute(categorySlug)
   const projectCategory = getProjectCategoryFromRoute(categorySlug)
 
+  console.log("category : ",category);
+  console.log("projectCategory : ",projectCategory);
+
   if (!category || !projectCategory) {
+    console.log('404 car pas category ou projectCategory');
     notFound()
   }
 
   const project = await getProjectForRoute(category.slug, slug, projectCategory)
-
+  console.log("project : ",project);
+  console.log("category.slug : ",category.slug);
+  console.log("projectCategory : ",projectCategory);
+  
   if (!project) {
+    console.log('404 car pas project');
     notFound()
   }
 
