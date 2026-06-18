@@ -68,9 +68,9 @@ export function ExperienceDetailPage({
                       variant="ghost"
                       className="w-fit bg-[var(--portfolio-hero-accent)]/10 hover:bg-[var(--portfolio-hero-accent)]/30 text-[var(--portfolio-hero-accent)] "
                     >
-                      <Link href={`#project-medias-section`}>
+                      <a href="#project-medias-section" className="no-underline">
                        Voir les photos
-                      </Link>
+                      </a>
                   </Button>
             )}
           </div>
