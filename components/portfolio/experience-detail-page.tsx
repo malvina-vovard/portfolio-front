@@ -49,7 +49,7 @@ export function ExperienceDetailPage({
             {project.titre}
           </h1>
 
-          <div className="flex flex-row gap-2">
+          <div className="flex flex-row items-center gap-2">
               {project.sous_titre && (
                   <p className="text-base uppercase tracking-[0.2em] text-muted-foreground sm:text-lg">
                     {project.sous_titre}
@@ -66,7 +66,7 @@ export function ExperienceDetailPage({
                   <Button
                       asChild
                       variant="ghost"
-                      className="w-fit text-[var(--portfolio-hero-accent)] hover:bg-[var(--portfolio-hero-accent)]/10 hover:text-[var(--portfolio-hero-accent)]"
+                      className="w-fit bg-[var(--portfolio-hero-accent)]/10 hover:bg-[var(--portfolio-hero-accent)]/30 text-[var(--portfolio-hero-accent)] "
                     >
                       <Link href={`#project-medias-section`}>
                        Voir les photos
