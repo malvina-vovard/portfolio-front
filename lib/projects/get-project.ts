@@ -127,10 +127,7 @@ export async function getProjectByTitleAndCategory(
             },
           },
         },
-        next: {
-          revalidate: 60,
-          tags: ["projects", `project:${category}:${title}`],
-        },
+        cache: "no-store",
       },
     )
     return response.data[0] ?? null

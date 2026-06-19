@@ -4,58 +4,26 @@ import { ExperienceDetailPage } from "@/components/portfolio/experience-detail-p
 import { getAppConfiguration } from "@/lib/app-configuration/get-app-configuration"
 import { getPortfolioThemeStyle } from "@/lib/app-configuration/theme-style"
 import {
-  experienceCategories,
   getCategoryBySlug
 } from "@/lib/portfolio/portfolio-data"
 import {
   getDisplayCategorySlugFromRoute,
   getProjectCategoryFromRoute,
-  getProjectRouteTitle,
   getProjectTitleFromRoute
 } from "@/lib/projects/categories"
-import {
-  getProjectByTitleAndCategory,
-  getProjectsByCategory
-} from "@/lib/projects/get-project"
+import { getProjectByTitleAndCategory } from "@/lib/projects/get-project"
 import { getJsonLd, getProjectMetadata } from "@/lib/seo"
 import { getStrapiMediaUrl } from "@/lib/strapi/media"
 import { richTextToPlainText } from "@/lib/strapi/rich-text"
 import type { ProjectMedia, ProjectWithMedia } from "@/types/project"
+
+export const dynamic = "force-dynamic"
 
 type ExperienceDetailRouteProps = {
   params: Promise<{
     category: string
     slug: string
   }>
-}
-
-export async function generateStaticParams() {
-  const cmsParams = (
-    await Promise.all(
-      experienceCategories.map(async (category) => {
-        const projectCategory = getProjectCategoryFromRoute(category.slug)
-
-        if (!projectCategory) {
-          return []
-        }
-
-        const projects = await getProjectsByCategory(projectCategory)
-
-        return projects.map((project) => ({
-          category: category.slug,
-          slug: getProjectRouteTitle(project.titre),
-        }))
-      }),
-    )
-  ).flat()
-
-  const paramsByRoute = new Map<string, { category: string; slug: string }>()
-
-  for (const param of cmsParams) {
-    paramsByRoute.set(`${param.category}/${param.slug}`, param)
-  }
-
-  return Array.from(paramsByRoute.values())
 }
 
 function getDisplayCategoryFromRoute(categorySlug: string) {
