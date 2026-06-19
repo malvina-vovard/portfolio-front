@@ -14,6 +14,7 @@ import {
   siteName,
 } from "@/lib/seo";
 import { cn } from "@/lib/utils";
+import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
@@ -130,7 +131,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <>
     <html
       lang="fr"
       className={cn(
@@ -158,9 +158,9 @@ export default function RootLayout({
         </Suspense>
         
         {children}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
-    <SpeedInsights />
-    </>
   );
 }
