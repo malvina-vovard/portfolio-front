@@ -122,6 +122,7 @@ export async function getProjectByTitleAndCategory(
             },
           },
           populate: {
+            couverture: true,
             ligne_medias: {
               populate: "medias",
             },

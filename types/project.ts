@@ -75,6 +75,7 @@ export type LigneMedia = StrapiEntity<{
 
 export type ProjectWithMedia = StrapiEntity<
   Project & {
+    couverture?: ProjectMedia | null
     ligne_medias?: LigneMedia[] | null
   }
 >

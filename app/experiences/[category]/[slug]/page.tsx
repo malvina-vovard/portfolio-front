@@ -12,10 +12,9 @@ import {
   getProjectTitleFromRoute
 } from "@/lib/projects/categories"
 import { getProjectByTitleAndCategory } from "@/lib/projects/get-project"
+import { getProjectPreviewImageUrl } from "@/lib/projects/project-media"
 import { getJsonLd, getProjectMetadata } from "@/lib/seo"
-import { getStrapiMediaUrl } from "@/lib/strapi/media"
 import { richTextToPlainText } from "@/lib/strapi/rich-text"
-import type { ProjectMedia, ProjectWithMedia } from "@/types/project"
 
 export const dynamic = "force-dynamic"
 
@@ -49,7 +48,7 @@ export async function generateMetadata({ params }: ExperienceDetailRouteProps) {
     category,
     project,
     path: `/experiences/${category.slug}/${slug}`,
-    image: getProjectLeadImage(project),
+    image: getProjectPreviewImageUrl(project),
   })
 }
 
@@ -92,7 +91,7 @@ export default async function ExperienceDetailRoute({
     },
     about: category.label,
     dateCreated: project.date,
-    image: getProjectLeadImage(project),
+    image: getProjectPreviewImageUrl(project),
   }
 
   return (
@@ -106,14 +105,6 @@ export default async function ExperienceDetailRoute({
   )
 }
 
-function getProjectLeadImage(project: ProjectWithMedia) {
-  const media = project.ligne_medias
-    ?.flatMap((row) => row.medias ?? [])
-    .find((item) => item.mime?.startsWith("image/"))
-
-  return getProjectMediaUrl(media)
-}
-
 async function getProjectForRoute(
   _categorySlug: string,
   slug: string,
@@ -122,14 +113,4 @@ async function getProjectForRoute(
   const decodedTitle = getProjectTitleFromRoute(slug)
 
   return getProjectByTitleAndCategory(decodedTitle, projectCategory)
-}
-
-function getProjectMediaUrl(media?: ProjectMedia | null) {
-  if (!media) {
-    return null
-  }
-
-  return getStrapiMediaUrl(
-    media.formats?.large?.url ?? media.formats?.medium?.url ?? media.url,
-  )
 }
